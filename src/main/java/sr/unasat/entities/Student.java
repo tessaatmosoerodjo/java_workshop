@@ -26,9 +26,6 @@ public class Student implements Serializable {
     @Column(name = "date_of_birth", nullable = false)
     private Date date_of_birth;
 
-    @Column(name = "gender", nullable = false)
-    private String gender;
-
     @Column(name = "telephone_number", nullable = false)
     private int telephone_number;
 
@@ -37,7 +34,12 @@ public class Student implements Serializable {
     private Set<Application> applications = new HashSet<>();
 
 
-    @ManyToMany
+    @ManyToOne
+
+    @JoinColumn(name = "gender_id")
+    private Gender gender;
+
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "student_address",
     joinColumns = @JoinColumn(name = "student_id"),
     inverseJoinColumns = @JoinColumn(name = "address_id"))
@@ -47,11 +49,10 @@ public class Student implements Serializable {
     public Student(){}
 
     //constructor
-    public Student(String lastName, String firstname, Date date_of_birth, String gender, int telephone_number ){
+    public Student(String lastName, String firstname, Date date_of_birth, int telephone_number) {
         this.lastName = lastName;
         this.firstname= firstname;
         this.date_of_birth = date_of_birth;
-        this.gender = gender;
         this.telephone_number = telephone_number;
     }
 
@@ -73,11 +74,9 @@ public class Student implements Serializable {
 
     public void setDate_of_birth(Date date_of_birth) {this.date_of_birth = date_of_birth;}
 
-    public String getGender() {return gender; }
-
-    public void setGender(String gender) {this.gender = gender;}
-
-    public int getTelephone_number() {return telephone_number; }
+    public int getTelephone_number() {
+        return telephone_number;
+    }
 
     public void setTelephone_number(int telephone_number) {this.telephone_number = telephone_number; }
 
@@ -88,6 +87,16 @@ public class Student implements Serializable {
     public void setAddress(Set<Address> address) {
         this.address = address;
     }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+
 
 
     public Set<Application> getApplications() {

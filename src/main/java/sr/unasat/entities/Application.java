@@ -29,6 +29,17 @@ public class Application  {
     private Education education;
 
 
+    @Column(name = "note", nullable = false)
+    private String note;
+
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 
     public int getApplication_id() {
         return application_id;
