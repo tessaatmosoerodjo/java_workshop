@@ -24,7 +24,7 @@ public class ApplicationDAO {
 
     public Application selectApplicationById(int application_id) {
         entityManager.getTransaction().begin();
-        String jpql = "select a from ApprovedApplication a where a.application_id = :application_id";
+        String jpql = "select a from Application a where a.application_id = :application_id";
         TypedQuery<Application> query = entityManager.createQuery(jpql, Application.class);
         query.setParameter("application_id", application_id);
         Application application = query.getSingleResult();
@@ -48,7 +48,7 @@ public class ApplicationDAO {
     public List<Application> selectAllApplication(){
         entityManager.getTransaction().begin();
         //hier begint transactie
-        String jpql = "select a from ApprovedApplication a";
+        String jpql = "select a from Application a";
         TypedQuery<Application> query = entityManager.createQuery(jpql, Application.class);
         List<Application> applicationList = query.getResultList();
 
