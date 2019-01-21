@@ -1,6 +1,7 @@
 package sr.unasat.entities;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 @Entity
@@ -20,7 +21,7 @@ public class Application  {
     @JoinColumn(name = "status_id")
     private Status status;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "tender_id")
     private Tender tender;
 
@@ -32,6 +33,16 @@ public class Application  {
     @Column(name = "note", nullable = false)
     private String note;
 
+    @Column(name = "date", nullable = false)
+    private Date date;
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public String getNote() {
         return note;

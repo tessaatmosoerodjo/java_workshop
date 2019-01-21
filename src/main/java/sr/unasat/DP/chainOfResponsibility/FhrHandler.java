@@ -14,11 +14,14 @@ public class FhrHandler extends Handler {
 
     @Override
     public Education handleRequest(Request request) {
-        if (Integer.valueOf(request.getValue()) < 0) {           //if request is eligible handle it
+        //Integer.valueOf(request.getValue()) == 3
+        if (request.getValue().equals("3")) {           //if request is eligible handle it
 
             EducationDAO educationDAO = new EducationDAO(entityManager);
             Education education = educationDAO.selectEducationByEducationName("FHR");
             return education;
+        } else {
+            handleRequest(request);
         }
         return null;
     }

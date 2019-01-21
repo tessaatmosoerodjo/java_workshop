@@ -14,12 +14,15 @@ public class AdekHandler extends Handler {
 
     @Override
     public Education handleRequest(Request request) {
-        if (Integer.valueOf(request.getValue()) < 0) {           //if request is eligible handle it
+        //Integer.valueOf(request.getValue()) ==1
+        if (request.getValue().equals("1")) {           //if request is eligible handle it
 
             EducationDAO educationDAO = new EducationDAO(entityManager);
             Education education = educationDAO.selectEducationByEducationName("ADEK");
             return education;
         }
+
         return null;
+
     }
 }

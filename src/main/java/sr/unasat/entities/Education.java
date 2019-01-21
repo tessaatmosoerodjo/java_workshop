@@ -2,8 +2,6 @@ package sr.unasat.entities;
 
 
 import javax.persistence.*;
-
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -24,7 +22,7 @@ public class Education{
     private int amount;
 
     //manyToOne = meerdere opleidingen kunnen 1 type hebben
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "type_id")
     private Type type;
 
@@ -35,9 +33,8 @@ public class Education{
 
     public Education(){}
 
-    public Education(String title, String education_name, int amount){
+    public Education(String title, int amount) {
         this.title = title;
-        this.education_name = education_name;
         this.amount = amount;
 
     }
