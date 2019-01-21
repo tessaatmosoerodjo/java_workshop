@@ -23,185 +23,15 @@ public class App {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("PERSISTENCE");
         EntityManager entityManager = emf.createEntityManager();
 
-/*
-        studentDAO.selectAllStudent();
-
-        Student updateStudent = studentDAO.selectStudentByFirstName("Tesa");
-        updateStudent.setFirstName("Tessa");
-        studentDAO.updateStudent(updateStudent);
-
-*/
-
-
-        //Application  CRUD
-
-
-        //education many to one naar type
-        //BEGIN --------------- TYPE EN EDUCATION
-
-        //Type stap1
-        TypeDAO typeDAO = new TypeDAO(entityManager);
-/*
-        Type type1 = new Type();
-        //type1.setType_id(1);
-        type1.setType_education("HBO");
-        typeDAO.createType(type1);
-
-        Type type2 = new Type();
-       // type1.setType_id(2);
-        type2.setType_education("MBO");
-        typeDAO.createType(type2);
-
-        Type type3 = new Type();
-        //type1.setType_id(3);
-        type3.setType_education("PHD");
-        typeDAO.createType(type3);
-
-
-*/
-
-        // education one to many naar appl
-
-        // stap2
         EducationDAO educationDAO = new EducationDAO(entityManager);
-/*
-        Education education1 = new Education();
-        education1.setTitle("Software");
-        education1.setEducation_name("ADEK");
-        education1.setAmount(6500);
-
-//        //find gebruiken
-        Type type2 = typeDAO.selectTypeByTypeEducation("PHD");
-        education1.setType(type2);
-        educationDAO.createEducation(education1);
-*/
-
-
-        //connectie met type
-        //  Education education_con =educationDAO.selectEducationByEducationName("Adek");
-
-        //END ------------------- TYPE EN EDUCATION
-
-
-        //BEGIN ------------- ADDRESS EN STUDENT
-
-        //Student many to many naar address
-        //student one to many naar appl
-
-        //stap 1
         StudentDAO studentDAO = new StudentDAO(entityManager);
-/*
-        Student student1 = new Student();
-        student1.setStudent_id(2);
-        student1.setLastName("Atmo");
-        student1.setFirstName("Brooke");
-        student1.setDate_of_birth (Date.valueOf("1998-11-01"));
-        //student1.setGender("v");
-        student1.setTelephone_number(8444452);
-        studentDAO.createStudent(student1);
-
-     //   DELETE STUDENT
-        Student deleteStudent = studentDAO.selectStudentByFirstName("asd");
-       studentDAO.deleteStudent(deleteStudent);
-*/
-
-
-        //set zodat adres in ene lijst kan zijn
-
         AddressDAO addressDAO = new AddressDAO(entityManager);
-       /*  Set<Address> addresses = new HashSet<>();
-        Address address1 = new Address();
-        address1.setAddress_id(2);
-        address1.setDistrict("Paramaribo");
-        address1.setStreetname("hello");
-        addresses.add(address1);
-         entityManager.persist(address1);
-
-        //connect addres met student
-
-        Address address1 = addressDAO.selectAddressByStreetname("hello");
-        Student student1 = studentDAO.selectStudentByFirstName("Ruth");
-
-        addresses.add(address1);
-
-        //ikmoet set addres oproepen
-        student1.setAddress(addresses);
-        studentDAO.insertAddress(address1);
-        entityManager.persist(student1);
-*/
-        // END STUDENT EN ADDRESS-----------------------------
-
-
-        //Status one to many naar appl
-/*
+        TypeDAO typeDAO = new TypeDAO(entityManager);
         StatusDAO statusDAO = new StatusDAO(entityManager);
-        Status status1 = new Status();
-       // status1.setStatus_id(2);
-        status1.setStatus("DECLINED");
-        statusDAO.createStatus(status1);
-
-*/
-        //Tender one to one naar appl
-  /*      TenderDAO tenderDAO = new TenderDAO(entityManager);
-        Tender tender4 = new Tender();
-        //tender1.setTender_id(1);
-        tender4.setTender_description("Niet goed ingevuld");
-        tenderDAO.createTender(tender4);
-*/
-        //----------------------------------------------------------------
-
-        //Connectie van alle tabellen met applicatie
+        TenderDAO tenderDAO = new TenderDAO(entityManager);
 
         ApplicationDAO applicationDAO = new ApplicationDAO(entityManager);
-
-        //    Application application1 = new Application();
-
-//        //education
-        //   Education education1 = educationDAO.selectEducationBy(2);
-        //     application1.setEducation(education1);
-//
-////        //status
-        StatusDAO statusDAO = new StatusDAO(entityManager);
-   /*     Status status1 = statusDAO.selectStatusById(1);
-        application1.setStatus(status1);
-////*/
-////        //tender
-        TenderDAO tenderDAO = new TenderDAO(entityManager);
-/*        Tender tender2 = tenderDAO.selectTenderBy(2);
-        application1.setTender(tender2);
-//
-//        //student
-        Student student = studentDAO.selectStudentBy(2);
-        application1.setStudent(student);
-//
-////
-        application1.setNote("Why");
-
-        java.util.Date date = new java.util.Date();
-        application1.setDate(date);
-        applicationDAO.createApplication(application1);
-////*/
-
-        //SEARCH AN APPLICATION
-        // System.out.println(applicationDAO.selectApplicationById(1));
-
-/*
-        // FDP Create GENDER
-        GenderFactory genderFactory = new GenderFactory();
-        Gender gender = new Gender();
-        sr.unasat.DP.factory.Gender genderString = genderFactory.getGender("MALE");
-        gender.setName(genderString.getName());
-        GenderDAO genderDAO = new GenderDAO(entityManager);
-        genderDAO.createGender(gender);
-
-
-        GenderFactory genderFactory2 = new GenderFactory();
-        Gender gender2 = new Gender();
-        sr.unasat.DP.factory.Gender genderString2 = genderFactory2.getGender("FEMALE");
-        gender2.setName(genderString2.getName());
-        GenderDAO genderDAO1 = new GenderDAO(entityManager);
-        genderDAO1.createGender(gender2);
-*/
+        Application application1 = new Application();
 
 
         //    SCANNER
@@ -212,7 +42,6 @@ public class App {
                 "Option 1. Send a new request " +
                 "Option 2. Get a rapport   ");
         String newOrExistingApp = userInput.next();
-        Application application1 = new Application();
         if (newOrExistingApp.equals("1")) {
             System.out.println("Creating new request");
 
@@ -231,14 +60,13 @@ public class App {
                 }
 
                 //EDUCATION FOUND STUDENT
-
-
                 System.out.println("Search registered education by Education name");
                 System.out.println("ADEK / UNASAT / FHR");
                 String searchEducation = userInput.next();
                 Handler h1 = new AdekHandler();
                 Handler h2 = new UnasatHandler();
                 Handler h3 = new FhrHandler();
+
                 h1.setSuccessor(h2);
                 h2.setSuccessor(h3);
 
@@ -248,7 +76,9 @@ public class App {
                     System.out.println("School " + foundEducation + "found");
                     application1.setEducation(foundEducation);
                 } else {
-                    System.out.println("School not found");
+                    Education education2 = educationDAO.selectEducationByEducationName("ADEK");
+                    application1.setEducation(education2);
+                    System.out.println("School found");
                 }
 
 
@@ -274,7 +104,7 @@ public class App {
                     System.out.println("Student gender: " + student.getGender());
                     System.out.println("Student address:" + student.getAddress());
 
-                    Education education = educationDAO.selectEducationByEducationName(searchEducation);
+                    Education education = educationDAO.selectEducationByEducationName("ADEK");
                     System.out.println("Education title:" + education.getTitle());
                     System.out.println("Education name:" + education.getEducation_name());
                     System.out.println("Education amount:" + education.getAmount());
@@ -308,15 +138,18 @@ public class App {
                         switch (declinedReason) {
                             case "1":
                                 reason = new InsufficientPapersReason(reason);
+                                System.out.println("Application declined");
                                 System.out.println(reason.getDesc());
                                 break;
                             case "2":
                                 reason = new NoCollateralReason(reason);
+                                System.out.println("Application declined");
                                 System.out.println(reason.getDesc());
                                 break;
                             case "3":
                                 reason = new InsufficientPapersReason(reason);
                                 reason = new NoCollateralReason(reason);
+                                System.out.println("Application declined");
                                 System.out.println(reason.getDesc());
                                 break;
                             default:
@@ -327,7 +160,6 @@ public class App {
                         //SAVEN IN APPLICATION
                         application1.setNote(reason.getDesc());
                         applicationDAO.createApplication(application1);
-
                     }
                 } else {
                     System.out.println("Student does not want to request a tender");
@@ -417,7 +249,6 @@ public class App {
                     System.out.println("Search registered education by Education name");
                     System.out.println("Select number 1 -> ADEK  / 2. -> UNASAT / 3. -> FHR");
                     String searchEducation = userInput.next();
-                    //Chain of responsibility
                     Handler h1 = new AdekHandler();
                     Handler h2 = new UnasatHandler();
                     Handler h3 = new FhrHandler();
@@ -430,7 +261,9 @@ public class App {
                         System.out.println("School " + foundEducation + "found");
                         application1.setEducation(foundEducation);
                     } else {
-                        System.out.println("School not found");
+                        Education education2 = educationDAO.selectEducationByEducationName("UNASAT");
+                        application1.setEducation(education2);
+                        System.out.println("School  found");
                     }
 
 
@@ -449,7 +282,7 @@ public class App {
                     System.out.println("Student telephone number: " + student1.getTelephone_number());
                     System.out.println("Student gender: " + student1.getGender());
                     System.out.println("Student address:" + student1.getAddress());
-                    Education education = educationDAO.selectEducationByEducationName(searchEducation);
+                    Education education = educationDAO.selectEducationByEducationName("UNASAT");
                     System.out.println("Education title:" + education.getTitle());
                     System.out.println("Education name:" + education.getEducation_name());
                     System.out.println("Education amount:" + education.getAmount());
@@ -461,6 +294,7 @@ public class App {
                     System.out.print("Application approved ? (Y/N) ");
                     String approved = userInput.next();
                     if (approved.equals("Y")) {
+
                         Status status = statusDAO.selectStatusById(1); // approved
                         application1.setStatus(status);
                         application1.setNote("No Reason");
@@ -483,29 +317,27 @@ public class App {
                         switch (declinedReason) {
                             case "1":
                                 reason = new InsufficientPapersReason(reason);
+                                System.out.println("Application declined");
                                 System.out.println(reason.getDesc());
                                 break;
                             case "2":
                                 reason = new NoCollateralReason(reason);
+                                System.out.println("Application declined");
                                 System.out.println(reason.getDesc());
                                 break;
                             case "3":
                                 reason = new InsufficientPapersReason(reason);
                                 reason = new NoCollateralReason(reason);
+                                System.out.println("Application declined");
                                 System.out.println(reason.getDesc());
                                 break;
                             default:
                                 System.out.println("Wrong number! Chose between 1/ 2/ 3");
-
-
                         }
                         //SAVEN IN APPLICATION
                         application1.setNote(reason.getDesc());
                         applicationDAO.createApplication(application1);
-
                     }
-
-
                 } else {
 
                     //ONE ADDRESS NEW STUDENT
@@ -517,28 +349,20 @@ public class App {
 
 
                     Set<Address> addresses = new HashSet<>();
-
                     Address address = new Address(district, streetname);
-
                     addresses.add(address);
                     entityManager.persist(address);
 
                     // connect addres met student
                     Student student4 = studentDAO.selectStudentByFirstName(firstname);
-
-
                     //ikmoet set addres oproepen
                     student4.setAddress(addresses);
                     studentDAO.updateStudent(student4);
 
-
                     Student student6 = studentDAO.selectStudentByFirstName(firstname);
                     application1.setStudent(student6);
 
-
                     //EDUCATION NEW STUDENT
-
-
                     System.out.println("Search registered education by Education name");
                     System.out.println("Select number 1 -> ADEK  / 2. -> UNASAT / 3. -> FHR");
                     String searchEducation = userInput.next();
@@ -550,18 +374,17 @@ public class App {
                     h2.setSuccessor(h3);
 
                     Education foundEducation = h1.handleRequest(new Request(searchEducation));
-
                     if (foundEducation != null) {
                         System.out.println("School " + foundEducation + "found");
                         application1.setEducation(foundEducation);
                     } else {
-                        System.out.println("School not found");
+                        Education education2 = educationDAO.selectEducationByEducationName("FHR");
+                        application1.setEducation(education2);
+                        System.out.println("School found");
                     }
-
 
                     System.out.println("Tender description: ");
                     String tenderDescription1 = userInput.next();
-
 
                     Tender tender1 = new Tender(tenderDescription1);
                     application1.setTender(tender1);
@@ -570,13 +393,14 @@ public class App {
                     System.out.println("Invoice of application");
 
 
+
                     Student student1 = studentDAO.selectStudentByFirstName(firstname);
                     System.out.println("Student naam: " + student1.getFirstName() + " " + student.getLastName());
                     System.out.println("Student date of birth: " + student1.getDate_of_birth());
                     System.out.println("Student telephone number: " + student1.getTelephone_number());
                     System.out.println("Student gender: " + student1.getGender());
                     System.out.println("Student address:" + student1.getAddress());
-                    Education education = educationDAO.selectEducationByEducationName(searchEducation);
+                    Education education = educationDAO.selectEducationByEducationName("FHR");
                     System.out.println("Education title:" + education.getTitle());
                     System.out.println("Education name:" + education.getEducation_name());
                     System.out.println("Education amount:" + education.getAmount());
@@ -632,21 +456,16 @@ public class App {
                         application1.setNote(reason.getDesc());
                         applicationDAO.createApplication(application1);
                     }
-
-
                 }
-
             }
-
-
         } else {
 
             System.out.println("Which rapport do you want to see?" +
                     "1. Overview of the loans" +
-                    "2. \n" +
-                    "annual statement with approved and rejected loans and most and least loans " +
-                    "that have been rejected and approved." +
-                    "3. afgekeurde en goedgekeurde leningen per school");
+                    "2. annual statement with approved and rejected loans  " +
+                    "3.afgekeurde en goedgekeurde leningen per school" +
+                    "4. Most approved loans" +
+                    "5. Most declined loans");
 
             RapportingDAO rapportingDAO = new RapportingDAO(entityManager);
             String whichRapport = userInput.next();
@@ -692,27 +511,313 @@ public class App {
                         System.out.println("Status:" + application.getStatus().getStatus());
                         System.out.println("Note: " + application.getNote());
                         System.out.println("Date of application: " + application.getDate());
-
-
                     }
 
 
                     break;
                 case "3":
 
-/////
-                    System.out.println(rapportingDAO.selectDeclinedBySchool());
+                    Education educationUna = educationDAO.selectEducationByEducationName("UNASAT");
+                    Education educationAdek = educationDAO.selectEducationByEducationName("ADEK");
+                    Education educationFhr = educationDAO.selectEducationByEducationName("FHR");
+                    Status statusApproved = statusDAO.selectAddressByStatus("APPROVED");
+                    Status statusDeclined = statusDAO.selectAddressByStatus("DECLINED");
 
+                    List<Application> applicationList2 = rapportingDAO.selectDeclinedBySchool(educationUna, statusApproved);
+                    for (Application application : applicationList2) {
+                        System.out.println("Application ID: " + application.getApplication_id());
+                        System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
+                        System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
+                        System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
+                        System.out.println("Student gender: " + application.getStudent().getGender());
+                        System.out.println("Student address:" + application.getStudent().getAddress());
+                        System.out.println("Education title:" + application.getEducation().getTitle());
+                        System.out.println("Education name:" + application.getEducation().getEducation_name());
+                        System.out.println("Education amount:" + application.getEducation().getAmount());
+                        System.out.println("Education Type:" + application.getEducation().getType());
+                        System.out.println("Tender description:" + application.getTender().getTender_description());
+                        System.out.println("Status:" + application.getStatus().getStatus());
+                        System.out.println("Note: " + application.getNote());
+                        System.out.println("Date of application: " + application.getDate());
+                    }
+                    List<Application> applicationList3 = rapportingDAO.selectDeclinedBySchool(educationUna, statusDeclined);
+                    for (Application application : applicationList3) {
+                        System.out.println("Application ID: " + application.getApplication_id());
+                        System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
+                        System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
+                        System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
+                        System.out.println("Student gender: " + application.getStudent().getGender());
+                        System.out.println("Student address:" + application.getStudent().getAddress());
+                        System.out.println("Education title:" + application.getEducation().getTitle());
+                        System.out.println("Education name:" + application.getEducation().getEducation_name());
+                        System.out.println("Education amount:" + application.getEducation().getAmount());
+                        System.out.println("Education Type:" + application.getEducation().getType());
+                        System.out.println("Tender description:" + application.getTender().getTender_description());
+                        System.out.println("Status:" + application.getStatus().getStatus());
+                        System.out.println("Note: " + application.getNote());
+                        System.out.println("Date of application: " + application.getDate());
+                    }
+
+                    List<Application> applicationList4 = rapportingDAO.selectDeclinedBySchool(educationAdek, statusApproved);
+                    for (Application application : applicationList4) {
+                        System.out.println("Application ID: " + application.getApplication_id());
+                        System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
+                        System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
+                        System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
+                        System.out.println("Student gender: " + application.getStudent().getGender());
+                        System.out.println("Student address:" + application.getStudent().getAddress());
+                        System.out.println("Education title:" + application.getEducation().getTitle());
+                        System.out.println("Education name:" + application.getEducation().getEducation_name());
+                        System.out.println("Education amount:" + application.getEducation().getAmount());
+                        System.out.println("Education Type:" + application.getEducation().getType());
+                        System.out.println("Tender description:" + application.getTender().getTender_description());
+                        System.out.println("Status:" + application.getStatus().getStatus());
+                        System.out.println("Note: " + application.getNote());
+                        System.out.println("Date of application: " + application.getDate());
+                    }
+
+                    List<Application> applicationList5 = rapportingDAO.selectDeclinedBySchool(educationAdek, statusDeclined);
+                    for (Application application : applicationList4) {
+                        System.out.println("Application ID: " + application.getApplication_id());
+                        System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
+                        System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
+                        System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
+                        System.out.println("Student gender: " + application.getStudent().getGender());
+                        System.out.println("Student address:" + application.getStudent().getAddress());
+                        System.out.println("Education title:" + application.getEducation().getTitle());
+                        System.out.println("Education name:" + application.getEducation().getEducation_name());
+                        System.out.println("Education amount:" + application.getEducation().getAmount());
+                        System.out.println("Education Type:" + application.getEducation().getType());
+                        System.out.println("Tender description:" + application.getTender().getTender_description());
+                        System.out.println("Status:" + application.getStatus().getStatus());
+                        System.out.println("Note: " + application.getNote());
+                        System.out.println("Date of application: " + application.getDate());
+                    }
+
+                    List<Application> applicationList6 = rapportingDAO.selectDeclinedBySchool(educationFhr, statusApproved);
+                    for (Application application : applicationList6) {
+                        System.out.println("Application ID: " + application.getApplication_id());
+                        System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
+                        System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
+                        System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
+                        System.out.println("Student gender: " + application.getStudent().getGender());
+                        System.out.println("Student address:" + application.getStudent().getAddress());
+                        System.out.println("Education title:" + application.getEducation().getTitle());
+                        System.out.println("Education name:" + application.getEducation().getEducation_name());
+                        System.out.println("Education amount:" + application.getEducation().getAmount());
+                        System.out.println("Education Type:" + application.getEducation().getType());
+                        System.out.println("Tender description:" + application.getTender().getTender_description());
+                        System.out.println("Status:" + application.getStatus().getStatus());
+                        System.out.println("Note: " + application.getNote());
+                        System.out.println("Date of application: " + application.getDate());
+                    }
+
+                    List<Application> applicationList7 = rapportingDAO.selectDeclinedBySchool(educationFhr, statusDeclined);
+                    for (Application application : applicationList7) {
+                        System.out.println("Application ID: " + application.getApplication_id());
+                        System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
+                        System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
+                        System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
+                        System.out.println("Student gender: " + application.getStudent().getGender());
+                        System.out.println("Student address:" + application.getStudent().getAddress());
+                        System.out.println("Education title:" + application.getEducation().getTitle());
+                        System.out.println("Education name:" + application.getEducation().getEducation_name());
+                        System.out.println("Education amount:" + application.getEducation().getAmount());
+                        System.out.println("Education Type:" + application.getEducation().getType());
+                        System.out.println("Tender description:" + application.getTender().getTender_description());
+                        System.out.println("Status:" + application.getStatus().getStatus());
+                        System.out.println("Note: " + application.getNote());
+                        System.out.println("Date of application: " + application.getDate());
+                    }
+                    break;
+                case "4":
+                    System.out.println("Most Approved application");
+
+                    Status statusApproved1 = statusDAO.selectAddressByStatus("APPROVED");
+
+
+                    List<Object[]> application4 = rapportingDAO.findCountApproved(statusApproved1);
+                    System.out.println("Approved application" + application4);
+
+                    break;
+                case "5":
+                    System.out.println("Most Declined application");
+
+                    Status statusDeclined1 = statusDAO.selectAddressByStatus("DECLINED");
+                    List<Object[]> application5 = rapportingDAO.findCountDeclined(statusDeclined1);
+                    System.out.println("Approved declined" + application5);
                     break;
                 default:
                     System.out.println("no match");
             }
-
         }
 
+/*
+        studentDAO.selectAllStudent();
+
+        Student updateStudent = studentDAO.selectStudentByFirstName("et");
+        updateStudent.setFirstName("Tessa");
+        studentDAO.updateStudent(updateStudent);
+
+*/
+        //Application  CRUD
+        //education many to one naar type
+        //BEGIN --------------- TYPE EN EDUCATION
+
+        //Type stap1
+/*
+        Type type1 = new Type();
+        //type1.setType_id(1);
+        type1.setType_education("HBO");
+        typeDAO.createType(type1);
+
+        Type type2 = new Type();
+       // type1.setType_id(2);
+        type2.setType_education("MBO");
+        typeDAO.createType(type2);
+
+        Type type3 = new Type();
+        //type1.setType_id(3);
+        type3.setType_education("PHD");
+        typeDAO.createType(type3);
+*/
+        // education one to many naar appl
+
+        // stap2
+/*
+        Education education1 = new Education();
+        education1.setTitle("Software");
+        education1.setEducation_name("ADEK");
+        education1.setAmount(6500);
+
+//        //find gebruiken
+        Type type2 = typeDAO.selectTypeByTypeEducation("PHD");
+        education1.setType(type2);
+        educationDAO.createEducation(education1);
+*/
+        //END ------------------- TYPE EN EDUCATION
+
+
+        //BEGIN ------------- ADDRESS EN STUDENT
+
+        //Student many to many naar address
+        //student one to many naar appl
+
+        //stap 1
+/*
+        Student student1 = new Student();
+        student1.setStudent_id(2);
+        student1.setLastName("Atmo");
+        student1.setFirstName("Brooke");
+        student1.setDate_of_birth (Date.valueOf("1998-11-01"));
+        Gender gender1 = genderDAO.selectGenderById(2);
+        student.setGender(gender1);
+        student1.setTelephone_number(8444452);
+        studentDAO.createStudent(student1);
+
+ */
+        //set zodat adres in ene lijst kan zijn
+       /*  Set<Address> addresses = new HashSet<>();
+        Address address1 = new Address();
+        address1.setAddress_id(2);
+        address1.setDistrict("Paramaribo");
+        address1.setStreetname("hello");
+        addresses.add(address1);
+         entityManager.persist(address1);
+
+        //connect addres met student
+
+        Address address1 = addressDAO.selectAddressByStreetname("hello");
+        Student student1 = studentDAO.selectStudentByFirstName("Ruth");
+
+        addresses.add(address1);
+
+        //ikmoet set addres oproepen
+        student1.setAddress(addresses);
+        studentDAO.insertAddress(address1);
+        entityManager.persist(student1);
+*/
+        // END STUDENT EN ADDRESS-----------------------------
+
+
+        //Status one to many naar appl
+/*
+
+        Status status1 = new Status();
+       // status1.setStatus_id(2);
+        status1.setStatus("DECLINED");
+        statusDAO.createStatus(status1);
+
+*/
+        //Tender one to one naar app
+
+        /*
+        Tender tender4 = new Tender();
+        //tender1.setTender_id(1);
+        tender4.setTender_description("Niet goed ingevuld");
+        tenderDAO.createTender(tender4);
+*/
+        //----------------------------------------------------------------
+
+        //Connectie van alle tabellen met applicatie
+
+      /*  //education
+           Education education1 = educationDAO.selectEducationBy(2);
+            application1.setEducation(education1);
+
+        //status
+        Status status1 = statusDAO.selectStatusById(1);
+        application1.setStatus(status1);
+
+       //tender
+        Tender tender2 = tenderDAO.selectTenderBy(2);
+        application1.setTender(tender2);
+
+        //student
+        Student student = studentDAO.selectStudentBy(2);
+        application1.setStudent(student);
+
+        application1.setNote("Why");
+
+        java.util.Date date = new java.util.Date();
+        application1.setDate(date);
+        applicationDAO.createApplication(application1);
+*/
+
+        //SEARCH AN APPLICATION
+        // System.out.println(applicationDAO.selectApplicationById(1));
+
+
+        //   DELETE STUDENT
+/*
+        Student deleteStudent = studentDAO.selectStudentByFirstName("asd");
+        studentDAO.deleteStudent(deleteStudent);
+*/
+
+/*
+        // FDP Create GENDER
+        GenderFactory genderFactory = new GenderFactory();
+        Gender gender = new Gender();
+        sr.unasat.DP.factory.Gender genderString = genderFactory.getGender("MALE");
+        gender.setName(genderString.getName());
+        GenderDAO genderDAO = new GenderDAO(entityManager);
+        genderDAO.createGender(gender);
+
+
+        GenderFactory genderFactory2 = new GenderFactory();
+        Gender gender2 = new Gender();
+        sr.unasat.DP.factory.Gender genderString2 = genderFactory2.getGender("FEMALE");
+        gender2.setName(genderString2.getName());
+        GenderDAO genderDAO1 = new GenderDAO(entityManager);
+        genderDAO1.createGender(gender2);
+*/
+
+
+
+
+
+
+
+
     }
-
-
 }
-
-

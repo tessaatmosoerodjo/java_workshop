@@ -13,6 +13,7 @@ import java.util.Set;
 public class Student implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //value will be automatically generated for that field.
     @Column(name = "student_id")
     private int student_id;
 
@@ -23,6 +24,7 @@ public class Student implements Serializable {
     private String firstname;
 
     @Temporal(TemporalType.DATE)
+    //store time and date(util) / drops the time value and only preserves the date.
     @Column(name = "date_of_birth", nullable = false)
     private Date date_of_birth;
 
@@ -32,14 +34,14 @@ public class Student implements Serializable {
 
     @OneToMany(mappedBy = "student")
     private Set<Application> applications = new HashSet<>();
-
+    //HashSet = store a collection of unique elements. implementeert Set interface
 
     @ManyToOne
-
     @JoinColumn(name = "gender_id")
     private Gender gender;
 
     @ManyToMany(cascade = {CascadeType.ALL})
+    //any changehappens to student should happen to address
     @JoinTable(name = "student_address",
     joinColumns = @JoinColumn(name = "student_id"),
     inverseJoinColumns = @JoinColumn(name = "address_id"))
@@ -144,18 +146,4 @@ public class Student implements Serializable {
             this.address.remove(address);
         }
     }
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "student id=" + student_id +
-                ", lastname='" + lastName + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", date of birth =" + date_of_birth +
-                ", gender=" + gender +
-                ", telephone number=" + telephone_number + '\'' +
-                ", address = " + address +
-                '}';
-    }
-
 }

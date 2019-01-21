@@ -2,7 +2,6 @@ package sr.unasat.dao;
 
 import sr.unasat.entities.Status;
 
-
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -20,7 +19,6 @@ public class StatusDAO {
         entityManager.persist(status);
         entityManager.getTransaction().commit();
     }
-
 
     public Status selectStatusById(int status_id) {
         entityManager.getTransaction().begin();
@@ -49,7 +47,6 @@ public class StatusDAO {
         TypedQuery<Status> query = entityManager.createQuery(jpql, Status.class);
         List<Status> statusList = query.getResultList();
         entityManager.getTransaction().commit();
-        //entityManager.close();
         return statusList;
     }
 
@@ -63,6 +60,5 @@ public class StatusDAO {
             entityManager.getTransaction().begin();
             entityManager.remove(status);
             entityManager.getTransaction().commit();
-
     }
 }

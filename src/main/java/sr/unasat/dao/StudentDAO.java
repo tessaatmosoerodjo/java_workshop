@@ -1,6 +1,5 @@
 package sr.unasat.dao;
 
-import sr.unasat.entities.Address;
 import sr.unasat.entities.Student;
 
 import javax.persistence.EntityManager;
@@ -23,17 +22,6 @@ public class StudentDAO {
         return student;
     }
 
-
-    public void insertAddress(Address address) {
-        entityManager.getTransaction().begin();
-        for (Student student : address.getStudents()) {
-            if (student.getStudent_id() == 0) {
-                entityManager.persist(student);
-            }
-        }
-        entityManager.getTransaction().commit();
-    }
-
     public Student selectStudentBy(int student_id) {
         entityManager.getTransaction().begin();
         String jpql = "select s from Student s where s.student_id = :student_id";
@@ -53,15 +41,14 @@ public class StudentDAO {
         entityManager.getTransaction().commit();
         return student;
     }
+
     public List<Student> selectAllStudent(){
         entityManager.getTransaction().begin();
         //hier begint transactie
         String jpql = "select s from Student s";
         TypedQuery<Student > query = entityManager.createQuery(jpql, Student.class);
         List<Student > studentList = query.getResultList();
-
         entityManager.getTransaction().commit();
-        entityManager.close();
         return studentList;
     }
 
@@ -76,7 +63,5 @@ public class StudentDAO {
             entityManager.getTransaction().begin();
             entityManager.remove(student);
             entityManager.getTransaction().commit();
-
     }
-
 }

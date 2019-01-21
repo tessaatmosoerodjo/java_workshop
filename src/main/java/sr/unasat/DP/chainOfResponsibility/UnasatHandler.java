@@ -14,7 +14,6 @@ public class UnasatHandler extends Handler {
 
     @Override
     public Education handleRequest(Request request) {
-        // int requestSender = Integer.valueOf(request.getValue());
         if (request.getValue().equals("2")) {           //if request is eligible handle it
 
             EducationDAO educationDAO = new EducationDAO(entityManager);

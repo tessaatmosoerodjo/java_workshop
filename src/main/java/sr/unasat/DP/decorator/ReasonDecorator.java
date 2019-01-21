@@ -6,3 +6,5 @@ public class ReasonDecorator implements Reason {
         return "reasons are: ";
     }
 }
+
+//modify functionality of an object at runtime

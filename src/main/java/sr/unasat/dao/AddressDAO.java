@@ -1,8 +1,6 @@
 package sr.unasat.dao;
 
 import sr.unasat.entities.Address;
-import sr.unasat.entities.Student;
-import sr.unasat.entities.Tender;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -23,16 +21,6 @@ public class AddressDAO {
 
     }
 
-//            (int address_id, String district, String streetname){
-//        Address address = new Address();
-//        address.setAddress_id(address_id);
-//        address.setDistrict(district);
-//        address.setStreetname(streetname);
-//        entityManager.persist(address);
-//        return address;
-//    }
-
-
     public Address selectAddressByStreetname(String streetname) {
         entityManager.getTransaction().begin();
         String jpql = "select a from Address a where a.streetname = :streetname";
@@ -49,11 +37,9 @@ public class AddressDAO {
         String jpql = "select a from Address a";
         TypedQuery<Address> query = entityManager.createQuery(jpql, Address.class);
         List<Address> addressList = query.getResultList();
-
         entityManager.getTransaction().commit();
         return addressList;
     }
-
 
     public void updateAddress(Address address){
         entityManager.getTransaction().begin();
@@ -67,8 +53,4 @@ public class AddressDAO {
             entityManager.remove(address);
             entityManager.getTransaction().commit();
     }
-
-
-
-
 }

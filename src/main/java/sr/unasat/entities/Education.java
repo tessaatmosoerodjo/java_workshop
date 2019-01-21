@@ -105,17 +105,4 @@ public class Education{
             this.application.remove(application);
         }
     }
-
-    @Override
-    public String toString() {
-        return "Education{" +
-                "education id=" + education_id +
-                ", title='" + title  + '\'' +
-                ", education name='" + education_name + '\'' +
-                ", amount = '" + amount + '\'' +
-                ", type = '" + type + '\'' +
-                '}';
-    }
-
-
 }

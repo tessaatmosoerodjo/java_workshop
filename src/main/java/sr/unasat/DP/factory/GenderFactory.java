@@ -17,3 +17,5 @@ public class GenderFactory {
         return null;
     }
 }
+
+//create object without exposing creation logic

@@ -1,6 +1,5 @@
 package sr.unasat.dao;
 
-import sr.unasat.entities.Tender;
 import sr.unasat.entities.Type;
 
 import javax.persistence.EntityManager;
@@ -33,15 +32,14 @@ public class TypeDAO {
         entityManager.getTransaction().commit();
         return type;
     }
+
     public List<Type> selectAllType(){
         entityManager.getTransaction().begin();
         //hier begint transactie
         String jpql = "select t from Type t";
         TypedQuery<Type> query = entityManager.createQuery(jpql, Type.class);
         List<Type> typeList = query.getResultList();
-
         entityManager.getTransaction().commit();
-       // entityManager.close();
         return typeList;
     }
 
@@ -49,7 +47,6 @@ public class TypeDAO {
         entityManager.getTransaction().begin();
         entityManager.merge(type);
         entityManager.getTransaction().commit();
-
     }
 
     public void deleteTypeByTypeEducation(Type type){
@@ -57,5 +54,4 @@ public class TypeDAO {
         entityManager.remove(type);
         entityManager.getTransaction().commit();
     }
-
 }

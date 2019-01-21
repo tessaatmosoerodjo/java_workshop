@@ -1,10 +1,6 @@
 package sr.unasat.entities;
 
-
-import sr.unasat.App.App;
-
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -64,13 +60,4 @@ public class Status{
             this.applications.remove(application);
         }
     }
-
-    @Override
-    public String toString(){
-        return "Status{" +
-                "status_id =" + status_id + '\'' +
-                ", status = " + status  +
-                '}';
-    }
-
 }

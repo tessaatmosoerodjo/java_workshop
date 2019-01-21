@@ -1,7 +1,6 @@
 package sr.unasat.entities;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -69,13 +68,5 @@ public class Type {
         if (this.educations.contains(education)){
             this.educations.remove(education);
         }
-    }
-
-    @Override
-    public String toString() {
-        return "Type{" +
-                "id=" + type_id+
-                ", type education='" + type_education+ '\'' +
-                '}';
     }
 }

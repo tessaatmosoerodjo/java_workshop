@@ -22,7 +22,6 @@ public class GenderDAO {
         entityManager.getTransaction().commit();
     }
 
-
     public Gender selectGenderById(int gender_id) {
         entityManager.getTransaction().begin();
         String jpql = "select g from Gender g where g.gender_id = :gender_id";
@@ -43,16 +42,13 @@ public class GenderDAO {
         return gender;
     }
 
-
     public List<Gender> selectAllGender() {
         entityManager.getTransaction().begin();
         //hier begint transactie
         String jpql = "select g from Gender g";
         TypedQuery<Gender> query = entityManager.createQuery(jpql, Gender.class);
         List<Gender> genderList = query.getResultList();
-
         entityManager.getTransaction().commit();
-        // entityManager.close();
         return genderList;
     }
 
@@ -60,7 +56,6 @@ public class GenderDAO {
         entityManager.getTransaction().begin();
         entityManager.merge(gender);
         entityManager.getTransaction().commit();
-
     }
 
     public void deleteGender(Gender gender) {

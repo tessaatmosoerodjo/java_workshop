@@ -25,6 +25,6 @@ public class JPAConfiguration {
             factory.close();
         }
     }
-
+    //EMF -> interface EM -> access to db in app. persist entity, find PK, query over entity
 
 }

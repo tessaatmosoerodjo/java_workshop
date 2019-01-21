@@ -94,16 +94,4 @@ public class Application  {
 
 
 
-    @Override
-    public String toString() {
-        return "ApplicationDAO{" +
-                "application id=" + application_id +
-                ", Student='" + student + '\'' +
-                ", education='" + education + '\'' +
-                ", tender=" + tender + '\'' +
-                ", status=" + status + '\'' +
-                '}';
-    }
-
-
 }

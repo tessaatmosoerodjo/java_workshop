@@ -51,14 +51,4 @@ public class Tender {
         this.application = application;
     }
 
-    @Override
-    public String toString() {
-        return "Tender{" +
-                "id=" + tender_id +
-                ", description='" + tender_description + '\'' +
-                '}';
-    }
-
-
-
 }

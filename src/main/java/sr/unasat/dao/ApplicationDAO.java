@@ -14,7 +14,6 @@ public class ApplicationDAO {
         this.entityManager = entityManager;
     }
 
-
     public void createApplication(Application application){
         entityManager.getTransaction().begin();
         entityManager.persist(application);
@@ -32,7 +31,6 @@ public class ApplicationDAO {
         return application;
     }
 
-
     public List<Application> selectAllApplicationByStatus(String status) {
         entityManager.getTransaction().begin();
         String jpql = "select s from Status s where s.status.status = :status";
@@ -43,17 +41,13 @@ public class ApplicationDAO {
         return applicationList;
     }
 
-
-
     public List<Application> selectAllApplication(){
         entityManager.getTransaction().begin();
         //hier begint transactie
         String jpql = "select a from Application a";
         TypedQuery<Application> query = entityManager.createQuery(jpql, Application.class);
         List<Application> applicationList = query.getResultList();
-
         entityManager.getTransaction().commit();
-        //entityManager.close();
         return applicationList;
     }
 
@@ -61,18 +55,11 @@ public class ApplicationDAO {
         entityManager.getTransaction().begin();
         entityManager.merge(application);
         entityManager.getTransaction().commit();
-
     }
 
-    public void deleteApplicationById(int application_id){
-        Application application = selectApplicationById(application_id);
-        if (application != null){
-            entityManager.remove(application);
-        }
+    public void deleteApplicationById(Application application) {
+        entityManager.getTransaction().begin();
+        entityManager.remove(application);
+        entityManager.getTransaction().commit();
     }
-
-
-
-
-
 }

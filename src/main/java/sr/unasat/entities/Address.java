@@ -9,7 +9,7 @@ import java.util.Set;
 @Table(name = "address")
 public class Address{
 
-    @Id
+    @Id //primary key column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "address_id")
     private int address_id;
@@ -83,15 +83,6 @@ public class Address{
         if (this.students.contains(student)) {
             this.students.remove(student);
         }
-    }
-
-    @Override
-    public String toString() {
-        return "Address{" +
-                "address id=" + address_id +
-                ", district='" + district + '\'' +
-                ", streetname='" + streetname + '\'' +
-                '}';
     }
 
 }
