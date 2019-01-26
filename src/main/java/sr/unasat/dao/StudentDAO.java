@@ -3,6 +3,7 @@ package sr.unasat.dao;
 import sr.unasat.entities.Student;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -37,9 +38,13 @@ public class StudentDAO {
         String jpql = "select s from Student s where s.firstname = :firstname";
         TypedQuery<Student> query = entityManager.createQuery(jpql, Student.class);
         query.setParameter("firstname", firstname);
-        Student student = query.getSingleResult();
         entityManager.getTransaction().commit();
-        return student;
+        try {
+            Student student = query.getSingleResult();
+            return student;
+        } catch (NoResultException nre) {
+            return null;
+        }
     }
 
     public List<Student> selectAllStudent(){

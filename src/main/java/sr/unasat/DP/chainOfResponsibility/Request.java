@@ -1,14 +1,15 @@
 package sr.unasat.DP.chainOfResponsibility;
 
 public class Request {
-    private String m_value;
 
-    public Request(String value) {
-        m_value = value;
+    private int option;
+
+    public Request(int option) {
+        this.option = option;
     }
 
-    public String getValue() {
-        return m_value;
+    public int getOption() {
+        return option;
     }
 
 }

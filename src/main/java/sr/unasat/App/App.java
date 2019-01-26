@@ -6,6 +6,7 @@ import sr.unasat.DP.decorator.InsufficientPapersReason;
 import sr.unasat.DP.decorator.NoCollateralReason;
 import sr.unasat.DP.decorator.Reason;
 import sr.unasat.DP.decorator.ReasonDecorator;
+import sr.unasat.DP.factory.StudentFactory;
 import sr.unasat.dao.*;
 import sr.unasat.entities.*;
 
@@ -17,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class App {
+
+    public Education foundEducation;
 
     public static void main(String[] args) throws ParseException {
 
@@ -38,78 +41,87 @@ public class App {
         Scanner userInput = new Scanner(System.in);
         //System.in =the standard input stream
 
-        System.out.println("Which opion do you want to choose. (1 / 2 )" +
-                "Option 1. Send a new request " +
-                "Option 2. Get a rapport   ");
+        System.out.println("WHICH OPTION DO YOU WANT TO CHOOSE (1 / 2 )|" +
+                "OPTION 1. SEND NEW REQUEST| " +
+                "OPTION 2. GET RAPPORT| ");
+
+        //search
+        //delete wrong registration of student
         String newOrExistingApp = userInput.next();
         if (newOrExistingApp.equals("1")) {
-            System.out.println("Creating new request");
+            System.out.println("CREATING NEW REQUEST");
 
             application1.setDate(new Date());
-            System.out.println("Is student registered? (Y/N)");
+            System.out.println("IS STUDENT REGISTERED? (Y/N)");
             String studentRegistered = userInput.next();
             if (studentRegistered.equals("Y")) {
-                System.out.println("Search registered student by name");
+                System.out.println("SEARCH REGISTERED STUDENT BY FIRSTNAME");
                 String searchStudent = userInput.next();
                 Student foundStudent = studentDAO.selectStudentByFirstName(searchStudent);
                 if (foundStudent != null) {
-                    System.out.println("Student " + searchStudent + "found");
+                    System.out.println("STUDENT " + searchStudent + " FOUND");
                     application1.setStudent(foundStudent);
                 } else {
-                    System.out.println("Student not found");
+                    System.out.println("STUDENT NOT FOUND");
                 }
 
                 //EDUCATION FOUND STUDENT
-                System.out.println("Search registered education by Education name");
-                System.out.println("ADEK / UNASAT / FHR");
-                String searchEducation = userInput.next();
-                Handler h1 = new AdekHandler();
-                Handler h2 = new UnasatHandler();
-                Handler h3 = new FhrHandler();
 
-                h1.setSuccessor(h2);
-                h2.setSuccessor(h3);
+                Handler adekHandler = new AdekHandler();
+                Handler unasatHandler = new UnasatHandler();
+                Handler fhrHandler = new FhrHandler();
 
-                Education foundEducation = h1.handleRequest(new Request(searchEducation));
+                adekHandler.setSuccessor(unasatHandler);
+                unasatHandler.setSuccessor(fhrHandler);
+//                fhrHandler.setSuccessor(adekHandler);
 
-                if (foundEducation != null) {
-                    System.out.println("School " + foundEducation + "found");
-                    application1.setEducation(foundEducation);
+                System.out.println();
+                System.out.println("***SELECT OPTIONS***");
+                System.out.println("| 1. ADEK" + ""
+                        + " | 2. UNASAT " + ""
+                        + " | 3. FHR " + "");
+                System.out.println("ENTER OPTION NUMBER: ");
+                System.out.print(">");
+                Integer option = userInput.nextInt();
+
+                Application application = adekHandler.processRequest(new Request(option), application1);
+
+                if (application.getEducation() != null) {
+                    System.out.println("School " + application.getEducation().getEducation_name() + " found");
+                    application1 = application;
                 } else {
-                    Education education2 = educationDAO.selectEducationByEducationName("ADEK");
-                    application1.setEducation(education2);
-                    System.out.println("School found");
+                    System.out.println("School not found");
                 }
 
 
                 //TENDER FOUNS STUDENT
-                System.out.println("Write why you want to request a  tender");
+                System.out.println("WRITE WHY YOU WANT TO REQUEST A TENDER");
                 String tenderDescription = userInput.next();
                 Tender tender = new Tender(tenderDescription);
                 application1.setTender(tender);
 
                 //Request tender
-                System.out.println("Request tender? (Y/N)");
+                System.out.println("REQUEST TENDER? (Y/N)");
                 String requestTender = userInput.next();
                 if (requestTender.equals("Y")) {
 
 
-                    System.out.println("Invoice of application");
+                    System.out.println("INVOICE OF APPLICATION");
 
 
                     Student student = studentDAO.selectStudentByFirstName(searchStudent);
-                    System.out.println("Student naam: " + student.getFirstName() + " " + student.getLastName());
-                    System.out.println("Student date of birth: " + student.getDate_of_birth());
-                    System.out.println("Student telephone number: " + student.getTelephone_number());
-                    System.out.println("Student gender: " + student.getGender());
-                    System.out.println("Student address:" + student.getAddress());
+                    System.out.println("STUDENT NAME : " + student.getFirstName() + " " + student.getLastName());
+                    System.out.println("STUDENT DATE OF BIRTH: " + student.getDate_of_birth());
+                    System.out.println("STUDENT TELEPHONE NUMBER: " + student.getTelephone_number());
+                    System.out.println("STUDENT GENDER: " + student.getGender());
+                    System.out.println("STUDENT ADDRESS:" + student.getAddress());
 
                     Education education = educationDAO.selectEducationByEducationName("ADEK");
-                    System.out.println("Education title:" + education.getTitle());
-                    System.out.println("Education name:" + education.getEducation_name());
-                    System.out.println("Education amount:" + education.getAmount());
-                    System.out.println("Education Type:" + education.getType());
-                    System.out.println("Tender description:" + tender.getTender_description());
+                    System.out.println("EDUCATION TITLE:" + education.getTitle());
+                    System.out.println("EDUCATION NAME:" + education.getEducation_name());
+                    System.out.println("EDUCATION AMOUNT:" + education.getAmount());
+                    System.out.println("EDUCATION TYPE:" + education.getType());
+                    System.out.println("TENDER DESCRIPTION:" + tender.getTender_description());
 
 
                     //STATUS FOUND STUDENT
@@ -120,40 +132,40 @@ public class App {
                         application1.setStatus(status);
                         application1.setNote("No Reason");
                         applicationDAO.createApplication(application1);
-                        System.out.println("Student can make transaction");
+                        System.out.println("StudentInterface can make transaction");
                     } else {
 
                         Status status = statusDAO.selectStatusById(2); // declined
                         application1.setStatus(status);
 
-                        System.out.println("Choose between 1 and 2 which reason the application is being declined for");
-                        System.out.println("1. Insufficient Papers! ");
-                        System.out.println("2. No Collateral! ");
-                        System.out.println("3. Both reasons");
+                        System.out.println("CHOOSE BETWEEEN 1 AND 2 WHICH REASON THE APPLICATION IS BEING DECLINED FOR>");
+                        System.out.println("1. INSUFFICIENT PAPEERS! ");
+                        System.out.println("2. NO COLLATERAL! ");
+                        System.out.println("3. BOTH REASONS");
 
-                        System.out.println("Which reason?");
+                        System.out.println("WHICH REASON?");
                         String declinedReason = userInput.next();
                         //Decorator
                         Reason reason = new ReasonDecorator();
                         switch (declinedReason) {
                             case "1":
                                 reason = new InsufficientPapersReason(reason);
-                                System.out.println("Application declined");
+                                System.out.println("APPLICATION DECLINED");
                                 System.out.println(reason.getDesc());
                                 break;
                             case "2":
                                 reason = new NoCollateralReason(reason);
-                                System.out.println("Application declined");
+                                System.out.println("APPLICATION DECLINED");
                                 System.out.println(reason.getDesc());
                                 break;
                             case "3":
                                 reason = new InsufficientPapersReason(reason);
                                 reason = new NoCollateralReason(reason);
-                                System.out.println("Application declined");
+                                System.out.println("APPLICATION DECLINED");
                                 System.out.println(reason.getDesc());
                                 break;
                             default:
-                                System.out.println("Wrong number! Chose between 1/ 2/ 3");
+                                System.out.println("WRONG NUMBER! CHOOSE BETWEEN 1/ 2/ 3");
 
 
                         }
@@ -162,82 +174,72 @@ public class App {
                         applicationDAO.createApplication(application1);
                     }
                 } else {
-                    System.out.println("Student does not want to request a tender");
+                    System.out.println("STUDENT DOES NOT WANT TO REQUEST A TENDER");
                 }
 
             } else {
 
                 //NEW STUDENT
-                System.out.println("Student registration:");
+                System.out.println("STUDENT REGISTRATION>");
 
 
-                System.out.print("Enter your lastname: ");
+                System.out.print("ENTER YOUR LASTNAMER> ");
                 String lastname = userInput.next();
 
-                System.out.print("Enter your firstname: ");
+                System.out.print("ENTER YOUR FIRSTNAME> ");
                 String firstname = userInput.next();
 
-                System.out.print("Enter your date of birth: DD-MM- YYYY ");
+                System.out.print("ENTER YOUR DATE OF BIRTH: DD-MM- YYYY >");
                 String date = userInput.next();
                 SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy");
 
                 java.util.Date dateOfBirth = format.parse(date);
 
-                System.out.print("Enter your phone number: ");
+                System.out.print("ENTER YOUR PHONE NUMBER> ");
                 int telephone_number = userInput.nextInt();
 
-                System.out.println("Choose gender! " + "1. Male " + "OR " + "2. Female");
 
-                Student student = new Student(lastname, firstname, dateOfBirth, telephone_number);
-
-
-                GenderDAO genderDAO = new GenderDAO(entityManager);
+                System.out.print("GENDER: MALE OR FEMALE ");
                 String gender = userInput.next();
-                switch (gender) {
-                    case "1":
-                        Gender gender1 = genderDAO.selectGenderById(1);
-                        student.setGender(gender1);
-                        break;
-                    case "2":
-                        Gender gender2 = genderDAO.selectGenderById(2);
-                        student.setGender(gender2);
-                        break;
-                    default:
-                        System.out.println("no match");
-                }
+
+                Student student = new Student(lastname, firstname, dateOfBirth, telephone_number, gender);
 
 
-                studentDAO.createStudent(student);
+                //studentDAO.createStudent(student);
 
-                System.out.println("More then one address? (Y/N)");
+                System.out.println("MORE THAN ONE ADDRESS? (Y/N)");
                 String moreAddress = userInput.next();
                 if (moreAddress.equals("Y")) {
 
                     //MORE ADDRESS NEW STUDENT
                     Set<Address> addresses = new HashSet<>();
-                    System.out.print("Enter your district: ");
+                    System.out.print("ENTER YOUR DISTRICT> ");
                     String district1 = userInput.next();
 
-                    System.out.print("Enter your Streetname: ");
+                    System.out.print("ENTER YOUR STREETNAME> ");
                     String streetname1 = userInput.next();
 
                     Address address = new Address(district1, streetname1);
                     addresses.add(address);
 
-                    System.out.print("Enter your district: ");
+                    System.out.print("ENTER YOUR DISTRICT> ");
                     String district2 = userInput.next();
 
-                    System.out.print("Enter your Streetname: ");
+                    System.out.print("ENTER YOUR STREETNAME> ");
                     String streetname2 = userInput.next();
 
                     Address address1 = new Address(district2, streetname2);
                     addresses.add(address1);
 
                     // connect addres met student
-                    Student student3 = studentDAO.selectStudentByFirstName(firstname);
+                    //Student student3 = studentDAO.selectStudentByFirstName(firstname);
                     //ikmoet set addres oproepen
-                    student3.setAddress(addresses);
-                    studentDAO.updateStudent(student3);
+                    student.setAddress(addresses);
+
+
+                    StudentFactory studentFactory = new StudentFactory(entityManager);
+                    Student studentFound = studentFactory.getStudent(firstname);
+                    if (studentFound == null) studentFactory.createStudent(student);
 
 
                     Student student5 = studentDAO.selectStudentByFirstName(firstname);
@@ -245,7 +247,7 @@ public class App {
 
 
                     //EDUCATION NEW STUDENT
-
+/*
                     System.out.println("Search registered education by Education name");
                     System.out.println("Select number 1 -> ADEK  / 2. -> UNASAT / 3. -> FHR");
                     String searchEducation = userInput.next();
@@ -261,13 +263,32 @@ public class App {
                         System.out.println("School " + foundEducation + "found");
                         application1.setEducation(foundEducation);
                     } else {
-                        Education education2 = educationDAO.selectEducationByEducationName("UNASAT");
-                        application1.setEducation(education2);
-                        System.out.println("School  found");
-                    }
+                        System.out.println("School not found");
+                    }*/
+
+                    Handler adekHandler = new AdekHandler();
+                    Handler unasatHandler = new UnasatHandler();
+                    Handler fhrHandler = new FhrHandler();
+
+                    adekHandler.setSuccessor(adekHandler);
+                    unasatHandler.setSuccessor(unasatHandler);
+                    fhrHandler.setSuccessor(fhrHandler);
 
 
-                    System.out.println("Tender description: ");
+                    System.out.println();
+                    System.out.println("***SELECT OPTIONS***");
+                    System.out.println("| 1. ADEK" + ""
+                            + " | 2. UNASAT " + ""
+                            + " | 3. FHR " + "");
+                    System.out.println("ENTER OPTION NUMBER: ");
+                    System.out.print(">");
+
+//                            Integer option = Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
+//                            adekHandler.processRequest(new Request(option));
+//                        }
+
+
+                    System.out.println("TENDER DESCRIPTION> ");
                     String tenderDescription1 = userInput.next();
                     Tender tender1 = new Tender(tenderDescription1);
                     application1.setTender(tender1);
@@ -291,48 +312,48 @@ public class App {
 
 
                     //STATUS NEW STUDENT
-                    System.out.print("Application approved ? (Y/N) ");
+                    System.out.print("APPLICATION APPROVED? (Y/N) ");
                     String approved = userInput.next();
                     if (approved.equals("Y")) {
 
                         Status status = statusDAO.selectStatusById(1); // approved
                         application1.setStatus(status);
-                        application1.setNote("No Reason");
+                        application1.setNote("NO REASON");
                         applicationDAO.createApplication(application1);
-                        System.out.println("Student can make transaction");
+                        System.out.println("STUDENT CAN MAKE TRANSACTION");
                     } else {
 
                         Status status = statusDAO.selectStatusById(2); // declined
                         application1.setStatus(status);
 
-                        System.out.println("Choose between 1 and 2 which reason the application is being declined for");
-                        System.out.println("1. Insufficient Papers! ");
-                        System.out.println("2. No Collateral! ");
-                        System.out.println("3. Both reasons");
+                        System.out.println("CHOOSE BETWEEEN 1 AND 2 WHICH REASON THE APPLICATION IS BEING DECLINED FOR>");
+                        System.out.println("1. INSUFFICIENT PAPEERS! ");
+                        System.out.println("2. NO COLLATERAL! ");
+                        System.out.println("3. BOTH REASONS");
 
-                        System.out.println("Which reason?");
+                        System.out.println("WHICH REASON?");
                         String declinedReason = userInput.next();
                         //Decorator
                         Reason reason = new ReasonDecorator();
                         switch (declinedReason) {
                             case "1":
                                 reason = new InsufficientPapersReason(reason);
-                                System.out.println("Application declined");
+                                System.out.println("APPLICATION DECLINED");
                                 System.out.println(reason.getDesc());
                                 break;
                             case "2":
                                 reason = new NoCollateralReason(reason);
-                                System.out.println("Application declined");
+                                System.out.println("APPLICATION DECLINED");
                                 System.out.println(reason.getDesc());
                                 break;
                             case "3":
                                 reason = new InsufficientPapersReason(reason);
                                 reason = new NoCollateralReason(reason);
-                                System.out.println("Application declined");
+                                System.out.println("APPLICATION DECLINED");
                                 System.out.println(reason.getDesc());
                                 break;
                             default:
-                                System.out.println("Wrong number! Chose between 1/ 2/ 3");
+                                System.out.println("WRONG NUMBER! CHOOSE BETWEEN 1/ 2/ 3");
                         }
                         //SAVEN IN APPLICATION
                         application1.setNote(reason.getDesc());
@@ -341,10 +362,10 @@ public class App {
                 } else {
 
                     //ONE ADDRESS NEW STUDENT
-                    System.out.print("Enter your district: ");
+                    System.out.print("ENTER YOUR DISTRICT> ");
                     String district = userInput.next();
 
-                    System.out.print("Enter your Streetname: ");
+                    System.out.print("ENTER YOUR STREETNAME> ");
                     String streetname = userInput.next();
 
 
@@ -354,16 +375,21 @@ public class App {
                     entityManager.persist(address);
 
                     // connect addres met student
-                    Student student4 = studentDAO.selectStudentByFirstName(firstname);
+                    // Student student4 = studentDAO.selectStudentByFirstName(firstname);
                     //ikmoet set addres oproepen
-                    student4.setAddress(addresses);
-                    studentDAO.updateStudent(student4);
+                    student.setAddress(addresses);
+                    //  studentDAO.updateStudent(student4);
+
+
+                    StudentFactory studentFactory = new StudentFactory(entityManager);
+                    Student studentFound = studentFactory.getStudent(firstname);
+                    if (studentFound == null) studentFactory.createStudent(student);
 
                     Student student6 = studentDAO.selectStudentByFirstName(firstname);
                     application1.setStudent(student6);
 
                     //EDUCATION NEW STUDENT
-                    System.out.println("Search registered education by Education name");
+                  /*  System.out.println("Search registered education by Education name");
                     System.out.println("Select number 1 -> ADEK  / 2. -> UNASAT / 3. -> FHR");
                     String searchEducation = userInput.next();
                     //Chain of responsibility
@@ -378,12 +404,33 @@ public class App {
                         System.out.println("School " + foundEducation + "found");
                         application1.setEducation(foundEducation);
                     } else {
-                        Education education2 = educationDAO.selectEducationByEducationName("FHR");
-                        application1.setEducation(education2);
-                        System.out.println("School found");
-                    }
 
-                    System.out.println("Tender description: ");
+                        System.out.println("School not found");
+                    }*/
+
+
+                    Handler adekHandler = new AdekHandler();
+                    Handler unasatHandler = new UnasatHandler();
+                    Handler fhrHandler = new FhrHandler();
+
+                    adekHandler.setSuccessor(adekHandler);
+                    unasatHandler.setSuccessor(unasatHandler);
+                    fhrHandler.setSuccessor(fhrHandler);
+
+
+                    System.out.println();
+                    System.out.println("***SELECT OPTIONS***");
+                    System.out.println("| 1. ADEK" + ""
+                            + " | 2. UNASAT " + ""
+                            + " | 3. FHR " + "");
+                    System.out.println("ENTER OPTION NUMBER: ");
+                    System.out.print(">");
+
+//                            Integer option = Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
+//                            adekHandler.processRequest(new Request(option));
+//
+
+                    System.out.println("TENDER DESCRIPTION> ");
                     String tenderDescription1 = userInput.next();
 
                     Tender tender1 = new Tender(tenderDescription1);
@@ -409,46 +456,46 @@ public class App {
 
 
                     //STATUS NEW STUDENT
-                    System.out.print("Application approved ? (Y/N) ");
+                    System.out.print("APPLICATION APPROVED? (Y/N) ");
                     String approved = userInput.next();
                     if (approved.equals("Y")) {
                         Status status = statusDAO.selectStatusById(1); // approved
                         application1.setStatus(status);
-                        application1.setNote("No Reason");
+                        application1.setNote("NO REASON");
                         applicationDAO.createApplication(application1);
-                        System.out.println("Student can make transaction");
+                        System.out.println("STUDENT CAN MAKE TRANSACTION");
                     } else {
                         Status status = statusDAO.selectStatusById(2); // Declined
                         application1.setStatus(status);
 
-                        System.out.println("Choose between 1 and 2 which reason the application is being declined for");
-                        System.out.println("1. Insufficient Papers! ");
-                        System.out.println("2. No Collateral! ");
-                        System.out.println("3. Both reasons");
+                        System.out.println("CHOOSE BETWEEEN 1 AND 2 WHICH REASON THE APPLICATION IS BEING DECLINED FOR>");
+                        System.out.println("1. INSUFFICIENT PAPEERS! ");
+                        System.out.println("2. NO COLLATERAL! ");
+                        System.out.println("3. BOTH REASONS");
 
-                        System.out.println("Which reason?");
+                        System.out.println("WHICH REASON?");
                         String declinedReason = userInput.next();
                         //Decorator
                         Reason reason = new ReasonDecorator();
                         switch (declinedReason) {
                             case "1":
                                 reason = new InsufficientPapersReason(reason);
-                                System.out.println("Application declined");
+                                System.out.println("APPLICATION DECLINED");
                                 System.out.println(reason.getDesc());
                                 break;
                             case "2":
                                 reason = new NoCollateralReason(reason);
-                                System.out.println("Application declined");
+                                System.out.println("APPLICATION DECLINED");
                                 System.out.println(reason.getDesc());
                                 break;
                             case "3":
                                 reason = new InsufficientPapersReason(reason);
                                 reason = new NoCollateralReason(reason);
-                                System.out.println("Application declined");
+                                System.out.println("APPLICATION DECLINED");
                                 System.out.println(reason.getDesc());
                                 break;
                             default:
-                                System.out.println("Wrong number! Chose between 1/ 2/ 3");
+                                System.out.println("WRONG NUMBER! CHOOSE BETWEEN 1/ 2/ 3");
 
 
                         }
@@ -481,7 +528,10 @@ public class App {
                         System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
                         System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
                         System.out.println("Student gender: " + application.getStudent().getGender());
-                        System.out.println("Student address:" + application.getStudent().getAddress());
+                        for (Address address : application.getStudent().getAddress()) {
+                            System.out.println("Student district:" + address.getDistrict());
+                            System.out.println("Student district:" + address.getStreetname());
+                        }
                         System.out.println("Education title:" + application.getEducation().getTitle());
                         System.out.println("Education name:" + application.getEducation().getEducation_name());
                         System.out.println("Education amount:" + application.getEducation().getAmount());
@@ -494,74 +544,33 @@ public class App {
                     break;
                 case "2":
 
-                    System.out.println("Overview of the year annual");
-                    List<Application> applicationList1 = rapportingDAO.selectJaaroverzicht();
-                    for (Application application : applicationList1) {
-                        System.out.println("Application ID: " + application.getApplication_id());
-                        System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
-                        System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
-                        System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
-                        System.out.println("Student gender: " + application.getStudent().getGender());
-                        System.out.println("Student address:" + application.getStudent().getAddress());
-                        System.out.println("Education title:" + application.getEducation().getTitle());
-                        System.out.println("Education name:" + application.getEducation().getEducation_name());
-                        System.out.println("Education amount:" + application.getEducation().getAmount());
-                        System.out.println("Education Type:" + application.getEducation().getType());
-                        System.out.println("Tender description:" + application.getTender().getTender_description());
-                        System.out.println("Status:" + application.getStatus().getStatus());
-                        System.out.println("Note: " + application.getNote());
-                        System.out.println("Date of application: " + application.getDate());
-                    }
+                    System.out.println();
+                    System.out.println("*ANNUAL REVIEW PER MONTH*");
+                    System.out.println("*ENTER THE YEAR: ");
+                    int sYear = userInput.nextInt();
+                    // Integer year = Integer.parseInt(sYear);
 
+                    for (int i = 1; i <= 12; i++) {
+                        List<Application> applicationList1 = rapportingDAO.selectJaaroverzicht(i, sYear);
+                        System.out.println("MONTH: " + i);
+                        if (applicationList1.isEmpty()) {
+                            System.out.println("NO RECORDS FOUND.");
+                        } else {
+                            rapportingDAO.printMonthlyOverview(applicationList1);
+                            System.out.println();
+                        }
+                    }
 
                     break;
                 case "3":
 
-                    Education educationUna = educationDAO.selectEducationByEducationName("UNASAT");
-                    Education educationAdek = educationDAO.selectEducationByEducationName("ADEK");
-                    Education educationFhr = educationDAO.selectEducationByEducationName("FHR");
-                    Status statusApproved = statusDAO.selectAddressByStatus("APPROVED");
-                    Status statusDeclined = statusDAO.selectAddressByStatus("DECLINED");
-
-                    List<Application> applicationList2 = rapportingDAO.selectDeclinedBySchool(educationUna, statusApproved);
-                    for (Application application : applicationList2) {
-                        System.out.println("Application ID: " + application.getApplication_id());
-                        System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
-                        System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
-                        System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
-                        System.out.println("Student gender: " + application.getStudent().getGender());
-                        System.out.println("Student address:" + application.getStudent().getAddress());
-                        System.out.println("Education title:" + application.getEducation().getTitle());
-                        System.out.println("Education name:" + application.getEducation().getEducation_name());
-                        System.out.println("Education amount:" + application.getEducation().getAmount());
-                        System.out.println("Education Type:" + application.getEducation().getType());
-                        System.out.println("Tender description:" + application.getTender().getTender_description());
-                        System.out.println("Status:" + application.getStatus().getStatus());
-                        System.out.println("Note: " + application.getNote());
-                        System.out.println("Date of application: " + application.getDate());
-                    }
-                    List<Application> applicationList3 = rapportingDAO.selectDeclinedBySchool(educationUna, statusDeclined);
-                    for (Application application : applicationList3) {
-                        System.out.println("Application ID: " + application.getApplication_id());
-                        System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
-                        System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
-                        System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
-                        System.out.println("Student gender: " + application.getStudent().getGender());
-                        System.out.println("Student address:" + application.getStudent().getAddress());
-                        System.out.println("Education title:" + application.getEducation().getTitle());
-                        System.out.println("Education name:" + application.getEducation().getEducation_name());
-                        System.out.println("Education amount:" + application.getEducation().getAmount());
-                        System.out.println("Education Type:" + application.getEducation().getType());
-                        System.out.println("Tender description:" + application.getTender().getTender_description());
-                        System.out.println("Status:" + application.getStatus().getStatus());
-                        System.out.println("Note: " + application.getNote());
-                        System.out.println("Date of application: " + application.getDate());
-                    }
-
-                    List<Application> applicationList4 = rapportingDAO.selectDeclinedBySchool(educationAdek, statusApproved);
+                    List<Application> applicationList4 = rapportingDAO.findAllSchoolApplications();
                     for (Application application : applicationList4) {
+                        //ander education dan naam wijzen
+                        // if () {
+                        System.out.println(" Education name: " + application.getEducation().getEducation_name());
                         System.out.println("Application ID: " + application.getApplication_id());
-                        System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
+                        System.out.println("Student name: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
                         System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
                         System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
                         System.out.println("Student gender: " + application.getStudent().getGender());
@@ -574,60 +583,7 @@ public class App {
                         System.out.println("Status:" + application.getStatus().getStatus());
                         System.out.println("Note: " + application.getNote());
                         System.out.println("Date of application: " + application.getDate());
-                    }
-
-                    List<Application> applicationList5 = rapportingDAO.selectDeclinedBySchool(educationAdek, statusDeclined);
-                    for (Application application : applicationList4) {
-                        System.out.println("Application ID: " + application.getApplication_id());
-                        System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
-                        System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
-                        System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
-                        System.out.println("Student gender: " + application.getStudent().getGender());
-                        System.out.println("Student address:" + application.getStudent().getAddress());
-                        System.out.println("Education title:" + application.getEducation().getTitle());
-                        System.out.println("Education name:" + application.getEducation().getEducation_name());
-                        System.out.println("Education amount:" + application.getEducation().getAmount());
-                        System.out.println("Education Type:" + application.getEducation().getType());
-                        System.out.println("Tender description:" + application.getTender().getTender_description());
-                        System.out.println("Status:" + application.getStatus().getStatus());
-                        System.out.println("Note: " + application.getNote());
-                        System.out.println("Date of application: " + application.getDate());
-                    }
-
-                    List<Application> applicationList6 = rapportingDAO.selectDeclinedBySchool(educationFhr, statusApproved);
-                    for (Application application : applicationList6) {
-                        System.out.println("Application ID: " + application.getApplication_id());
-                        System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
-                        System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
-                        System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
-                        System.out.println("Student gender: " + application.getStudent().getGender());
-                        System.out.println("Student address:" + application.getStudent().getAddress());
-                        System.out.println("Education title:" + application.getEducation().getTitle());
-                        System.out.println("Education name:" + application.getEducation().getEducation_name());
-                        System.out.println("Education amount:" + application.getEducation().getAmount());
-                        System.out.println("Education Type:" + application.getEducation().getType());
-                        System.out.println("Tender description:" + application.getTender().getTender_description());
-                        System.out.println("Status:" + application.getStatus().getStatus());
-                        System.out.println("Note: " + application.getNote());
-                        System.out.println("Date of application: " + application.getDate());
-                    }
-
-                    List<Application> applicationList7 = rapportingDAO.selectDeclinedBySchool(educationFhr, statusDeclined);
-                    for (Application application : applicationList7) {
-                        System.out.println("Application ID: " + application.getApplication_id());
-                        System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
-                        System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
-                        System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
-                        System.out.println("Student gender: " + application.getStudent().getGender());
-                        System.out.println("Student address:" + application.getStudent().getAddress());
-                        System.out.println("Education title:" + application.getEducation().getTitle());
-                        System.out.println("Education name:" + application.getEducation().getEducation_name());
-                        System.out.println("Education amount:" + application.getEducation().getAmount());
-                        System.out.println("Education Type:" + application.getEducation().getType());
-                        System.out.println("Tender description:" + application.getTender().getTender_description());
-                        System.out.println("Status:" + application.getStatus().getStatus());
-                        System.out.println("Note: " + application.getNote());
-                        System.out.println("Date of application: " + application.getDate());
+                        // }
                     }
                     break;
                 case "4":
@@ -655,7 +611,7 @@ public class App {
 /*
         studentDAO.selectAllStudent();
 
-        Student updateStudent = studentDAO.selectStudentByFirstName("et");
+        StudentInterface updateStudent = studentDAO.selectStudentByFirstName("et");
         updateStudent.setFirstName("Tessa");
         studentDAO.updateStudent(updateStudent);
 
@@ -700,17 +656,17 @@ public class App {
 
         //BEGIN ------------- ADDRESS EN STUDENT
 
-        //Student many to many naar address
+        //StudentInterface many to many naar address
         //student one to many naar appl
 
         //stap 1
 /*
-        Student student1 = new Student();
+        StudentInterface student1 = new StudentInterface();
         student1.setStudent_id(2);
         student1.setLastName("Atmo");
         student1.setFirstName("Brooke");
         student1.setDate_of_birth (Date.valueOf("1998-11-01"));
-        Gender gender1 = genderDAO.selectGenderById(2);
+        StudentInterface gender1 = genderDAO.selectGenderById(2);
         student.setGender(gender1);
         student1.setTelephone_number(8444452);
         studentDAO.createStudent(student1);
@@ -728,7 +684,7 @@ public class App {
         //connect addres met student
 
         Address address1 = addressDAO.selectAddressByStreetname("hello");
-        Student student1 = studentDAO.selectStudentByFirstName("Ruth");
+        StudentInterface student1 = studentDAO.selectStudentByFirstName("Ruth");
 
         addresses.add(address1);
 
@@ -774,7 +730,7 @@ public class App {
         application1.setTender(tender2);
 
         //student
-        Student student = studentDAO.selectStudentBy(2);
+        StudentInterface student = studentDAO.selectStudentBy(2);
         application1.setStudent(student);
 
         application1.setNote("Why");
@@ -790,24 +746,24 @@ public class App {
 
         //   DELETE STUDENT
 /*
-        Student deleteStudent = studentDAO.selectStudentByFirstName("asd");
+        StudentInterface deleteStudent = studentDAO.selectStudentByFirstName("asd");
         studentDAO.deleteStudent(deleteStudent);
 */
 
 /*
         // FDP Create GENDER
-        GenderFactory genderFactory = new GenderFactory();
-        Gender gender = new Gender();
-        sr.unasat.DP.factory.Gender genderString = genderFactory.getGender("MALE");
-        gender.setName(genderString.getName());
+        StudentFactory genderFactory = new StudentFactory();
+        StudentInterface gender = new StudentInterface();
+        sr.unasat.DP.factory.StudentInterface genderString = genderFactory.getGender("MALE");
+        gender.setName(genderString.StudentInterface());
         GenderDAO genderDAO = new GenderDAO(entityManager);
         genderDAO.createGender(gender);
 
 
-        GenderFactory genderFactory2 = new GenderFactory();
-        Gender gender2 = new Gender();
-        sr.unasat.DP.factory.Gender genderString2 = genderFactory2.getGender("FEMALE");
-        gender2.setName(genderString2.getName());
+        StudentFactory genderFactory2 = new StudentFactory();
+        StudentInterface gender2 = new StudentInterface();
+        sr.unasat.DP.factory.StudentInterface genderString2 = genderFactory2.getGender("FEMALE");
+        gender2.setName(genderString2.StudentInterface());
         GenderDAO genderDAO1 = new GenderDAO(entityManager);
         genderDAO1.createGender(gender2);
 */

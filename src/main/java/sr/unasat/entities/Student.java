@@ -31,14 +31,25 @@ public class Student implements Serializable {
     @Column(name = "telephone_number", nullable = false)
     private int telephone_number;
 
+    @Column(name = "gender", nullable = false)
+    private String gender;
+
+    //constructor
+    public Student(String lastName, String firstname, Date date_of_birth, int telephone_number, String gender) {
+        this.lastName = lastName;
+        this.firstname = firstname;
+        this.date_of_birth = date_of_birth;
+        this.telephone_number = telephone_number;
+        this.gender = gender;
+    }
+
+    public String getGender() {
+        return gender;
+    }
 
     @OneToMany(mappedBy = "student")
     private Set<Application> applications = new HashSet<>();
     //HashSet = store a collection of unique elements. implementeert Set interface
-
-    @ManyToOne
-    @JoinColumn(name = "gender_id")
-    private Gender gender;
 
     @ManyToMany(cascade = {CascadeType.ALL})
     //any changehappens to student should happen to address
@@ -50,12 +61,8 @@ public class Student implements Serializable {
 
     public Student(){}
 
-    //constructor
-    public Student(String lastName, String firstname, Date date_of_birth, int telephone_number) {
-        this.lastName = lastName;
-        this.firstname= firstname;
-        this.date_of_birth = date_of_birth;
-        this.telephone_number = telephone_number;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
 
@@ -90,13 +97,6 @@ public class Student implements Serializable {
         this.address = address;
     }
 
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
 
 
 
