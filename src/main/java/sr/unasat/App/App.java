@@ -91,6 +91,10 @@ public class App {
                     application1 = application;
                 } else {
                     System.out.println("School not found");
+                    System.out.println("THIS IS NOT CORRECT OPTION ");
+                    System.out.println("APPLICATION EXIT ");
+                    System.exit(0);
+
                 }
 
 
@@ -175,6 +179,7 @@ public class App {
                     }
                 } else {
                     System.out.println("STUDENT DOES NOT WANT TO REQUEST A TENDER");
+                    System.exit(0);
                 }
 
             } else {
