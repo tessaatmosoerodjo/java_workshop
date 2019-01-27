@@ -26,8 +26,6 @@ public class Type {
         this.type_education = type_education;
     }
 
-
-
     public int getType_id() {
         return type_id;
     }
@@ -52,21 +50,4 @@ public class Type {
         this.educations = education;
     }
 
-    public void addEducation(Education education){
-        if (education.getType() != this){
-            education.setType(this);
-        }
-        if (this.educations.contains(education)){
-            this.educations.add(education);
-        }
-    }
-
-    public void removeEducation(Education education){
-        if (education.getType() == this){
-            education.setType(null);
-        }
-        if (this.educations.contains(education)){
-            this.educations.remove(education);
-        }
-    }
 }

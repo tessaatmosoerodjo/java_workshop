@@ -88,21 +88,5 @@ public class Education{
         this.application = applications;
     }
 
-    public void addApplication(Application application) {
-        if (application.getEducation() != this) {
-            application.setEducation(this);
-        }
-        if (!this.application.contains(application)) {
-            this.application.add(application);
-        }
-    }
 
-    public void removeApplication(Application application) {
-        if (application.getEducation() == this) {
-            application.setEducation(null);
-        }
-        if (this.application.contains(application)) {
-            this.application.remove(application);
-        }
-    }
 }

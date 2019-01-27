@@ -26,14 +26,4 @@ public class FhrHandler extends Handler {
         return application;
     }
 
- /*   @Override
-    public Education handleRequest(Request request) {
-        if (request.getValue().equals("3")) {           //if request is eligible handle it
-
-            EducationDAO educationDAO = new EducationDAO(entityManager);
-            Education education = educationDAO.selectEducationByEducationName("FHR");
-            return education;
-        }
-        return null;
-    }*/
 }

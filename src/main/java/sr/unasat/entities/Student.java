@@ -65,8 +65,6 @@ public class Student implements Serializable {
         this.gender = gender;
     }
 
-
-
     public int getStudent_id() {return student_id; }
 
     public void setStudent_id(int student_id) {this.student_id = student_id; }
@@ -97,53 +95,11 @@ public class Student implements Serializable {
         this.address = address;
     }
 
-
-
-
-
     public Set<Application> getApplications() {
         return applications;
     }
 
     public void setApplications(Set<Application> applications) {
         this.applications = applications;
-    }
-
-    public void addAddress(Address address) {
-        if (!address.getStudents().contains(this)) {
-            address.getStudents().add(this);
-        }
-        if (!this.address.contains(address)) {
-            this.address.add(address);
-        }
-    }
-
-
-
-    public void addApplication(Application application){
-        if (application.getStudent() != this){
-            application.setStudent(this);
-        }
-        if (this.applications.contains(application)){
-            this.applications.add(application);
-        }
-    }
-
-    public void addA(Address address) {
-        if (!address.getStudents().contains(this)) {
-            address.getStudents().add(this);
-        }
-        if (!this.address.contains(address)) {
-            this.address.add(address);
-        }
-    }
-
-    public void removeAddress(Address address) {
-        if (address.getStudents().contains(this)) {
-            address.getStudents().remove(this);
-        }
-        if (this.address.contains(address)) {
-            this.address.remove(address);
-        }
     }
 }

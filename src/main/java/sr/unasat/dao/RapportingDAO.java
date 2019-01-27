@@ -2,7 +2,6 @@ package sr.unasat.dao;
 
 import sr.unasat.entities.Address;
 import sr.unasat.entities.Application;
-import sr.unasat.entities.Education;
 import sr.unasat.entities.Status;
 
 import javax.persistence.EntityManager;
@@ -29,7 +28,6 @@ public class RapportingDAO {
         return applicationList;
     }
 
-    //Jaaroverzicht met goed/afgekeurd.
     public List<Application> selectJaaroverzicht(int month, int year) {
         entityManager.getTransaction().begin();
         String jpql = "SELECT a FROM Application a " +
@@ -66,18 +64,6 @@ public class RapportingDAO {
     }
 
     //afgekeurde per school
-    public List<Application> selectDeclinedBySchool(Education education, Status status) {
-        entityManager.getTransaction().begin();
-        String jpql = "select a from Application a where a.education= :education and a.status= :status ";
-        TypedQuery<Application> query = entityManager.createQuery(jpql, Application.class);
-        query.setParameter("education", education);
-        query.setParameter("status", status);
-        List<Application> results = query.getResultList();
-        entityManager.getTransaction().commit();
-        return results;
-    }
-
-    //afgekeurde per school
     public List<Application> findAllSchoolApplications() {
         entityManager.getTransaction().begin();
         String jpql = "select a from Application a order by education desc, status";
@@ -88,38 +74,51 @@ public class RapportingDAO {
         return results;
     }
 
-
     public void printMonthlyOverview(List<Application> applicationList1) {
 
         for (Application application : applicationList1) {
             System.out.println("");
             System.out.println("-------------BEGIN----------------");
-            System.out.println("Date of application: " + application.getDate());
-            System.out.println("Application ID: " + application.getApplication_id());
+            System.out.println("DATE OF APPLICATION: " + application.getDate());
+            System.out.println("APPLICATION ID: " + application.getApplication_id());
             System.out.println("-----------------------------");
-            System.out.println("Student naam: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
-            System.out.println("Student date of birth: " + application.getStudent().getDate_of_birth());
-            System.out.println("Student telephone number: " + application.getStudent().getTelephone_number());
-            System.out.println("Student gender: " + application.getStudent().getGender());
+            System.out.println("STUDENT FULL NAME: " + application.getStudent().getFirstName() + " " + application.getStudent().getLastName());
+            System.out.println("STUDENT DATE OF BIRTH: " + application.getStudent().getDate_of_birth());
+            System.out.println("STUDENT TELEPHONE NUMBER: " + application.getStudent().getTelephone_number());
+            System.out.println("STUDENT GENDER: " + application.getStudent().getGender());
             System.out.println("-----------------------------");
             for (Address address : application.getStudent().getAddress()) {
-                System.out.println("Student address ");
-                System.out.println("Student district:" + address.getDistrict());
-                System.out.println("Student streetname:" + address.getStreetname());
+                System.out.println("STUDENT ADDRESS ");
+                System.out.println("STUDENT DISTRICT: " + address.getDistrict());
+                System.out.println("STUDENT STREETNAME: " + address.getStreetname());
                 System.out.println("-----------------------------");
             }
-            System.out.println("Education title:" + application.getEducation().getTitle());
-            System.out.println("Education name:" + application.getEducation().getEducation_name());
-            System.out.println("Education amount:" + application.getEducation().getAmount());
-            System.out.println("Education Type:" + application.getEducation().getType().getType_education());
+            System.out.println("EDUCATION TITLE: " + application.getEducation().getTitle());
+            System.out.println("EDUCATION NAME: " + application.getEducation().getEducation_name());
+            System.out.println("EDUCATION AMOUNT: " + application.getEducation().getAmount());
+            System.out.println("EDUCATION TYPE: " + application.getEducation().getType().getType_education());
             System.out.println("-----------------------------");
-            System.out.println("Tender description:" + application.getTender().getTender_description());
+            System.out.println("TENDER DESCRIPTION: " + application.getTender().getTender_description());
             System.out.println("-----------------------------");
-            System.out.println("Status:" + application.getStatus().getStatus());
-            System.out.println("Note: " + application.getNote());
+            System.out.println("STATUS: " + application.getStatus().getStatus());
+            System.out.println("NOTE: " + application.getNote());
             System.out.println("-------------END----------------");
             System.out.println("");
         }
+        StatusDAO statusDAO = new StatusDAO(entityManager);
+        RapportingDAO rapportingDAO = new RapportingDAO(entityManager);
+
+        System.out.println("Most Approved application");
+        Status statusApproved1 = statusDAO.selectAddressByStatus("APPROVED");
+        List<Object[]> application4 = rapportingDAO.findCountApproved(statusApproved1);
+        System.out.println("Approved application" + application4);
+
+        System.out.println("Most Declined application");
+        Status statusDeclined1 = statusDAO.selectAddressByStatus("DECLINED");
+        List<Object[]> application5 = rapportingDAO.findCountDeclined(statusDeclined1);
+        System.out.println("Approved declined" + application5);
+
+
     }
 
 

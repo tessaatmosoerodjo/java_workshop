@@ -26,15 +26,4 @@ public class AdekHandler extends Handler {
         return application;
     }
 
-  /*  @Override
-    public Education handleRequest(Request request) {
-        if (request.getValue().equals("1")) {           //if request is eligible handle it
-
-            EducationDAO educationDAO = new EducationDAO(entityManager);
-            Education education = educationDAO.selectEducationByEducationName("ADEK");
-            return education;
-        }
-        return null;
-
-    }*/
 }

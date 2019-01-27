@@ -21,7 +21,6 @@ public class StudentFactory implements StudentInterface {
     public Student getStudent(String firstname) {
         if (firstname != null) {
             StudentDAO studentDAO = new StudentDAO(entityManager);
-
             Student student = studentDAO.selectStudentByFirstName(firstname);
             if (student != null) {
                 System.out.println("STUDENT ALREADY EXISTS.");

@@ -1,15 +1,9 @@
 package sr.unasat.DP.chainOfResponsibility;
-
-
 import sr.unasat.entities.Application;
-import sr.unasat.entities.Education;
 
 public abstract class Handler {
 
     protected Handler successor;
-    Education education;
-
-    // public abstract Education handleRequest();
 
     abstract protected int getOption();
 
@@ -18,7 +12,6 @@ public abstract class Handler {
     public void setSuccessor(Handler successor) {
         this.successor = successor;
     }
-
 
     public Application processRequest(Request request, Application application) {
         if (request.getOption() == this.getOption()) {

@@ -26,8 +26,6 @@ public class Status{
         this.status = status;
     }
 
-
-
     public int getStatus_id() {return status_id;}
 
     public void setStatus_id(int status_id) {this.status_id = status_id;}
@@ -43,21 +41,4 @@ public class Status{
         this.applications = applications;
     }
 
-    public void addApplication(Application application){
-        if (application.getStatus() != this){
-            application.setStatus(this);
-        }
-        if (this.applications.contains(application)){
-            this.applications.add(application);
-        }
-    }
-
-    public void removeApplication(Application application){
-        if (application.getStatus() == this){
-            application.setStatus(null);
-        }
-        if (this.applications.contains(application)){
-            this.applications.remove(application);
-        }
-    }
 }

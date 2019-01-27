@@ -10,10 +10,6 @@ import javax.persistence.Persistence;
 
 public class UnasatHandler extends Handler {
 
-
-    protected Handler successor;
-
-
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("PERSISTENCE");
     EntityManager entityManager = emf.createEntityManager();
 
@@ -29,20 +25,6 @@ public class UnasatHandler extends Handler {
         application.setEducation(education);
         return application;
     }
-
-//    @Override
-//    public Education handleRequest(Request request) {
-//        if (request.getValue().equals("2")) {           //if request is eligible handle it
-//
-//            EducationDAO educationDAO = new EducationDAO(entityManager);
-//            Education education = educationDAO.selectEducationByEducationName("UNASAT");
-//            return education;
-//        }
-//        else if (successor != null) {
-//            successor.handleRequest(request);
-//        }
-//        return null;
-//    }
 }
 
 

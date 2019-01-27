@@ -32,9 +32,6 @@ public class Address{
         this.streetname = streetname;
     }
 
-
-
-
     public int getAddress_id() {
         return address_id;
     }
@@ -65,24 +62,6 @@ public class Address{
 
     public void setStudents(Set<Student> students) {
         this.students = students;
-    }
-
-    public void addStudents(Student student) {
-        if (!student.getAddress().contains(this)) {
-            student.getAddress().add(this);
-        }
-        if (!this.students.contains(student)) {
-            this.students.add(student);
-        }
-    }
-
-    public void removeStudent(Student student) {
-        if (student.getAddress().contains(this)) {
-            student.getAddress().remove(this);
-        }
-        if (this.students.contains(student)) {
-            this.students.remove(student);
-        }
     }
 
 }
