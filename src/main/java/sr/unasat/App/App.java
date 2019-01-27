@@ -184,8 +184,9 @@ public class App {
             } else if (studentRegistered.equals("N")) {
 
                 //NEW STUDENT
-                System.out.println("STUDENT REGISTRATION>");
-                System.out.print("ENTER YOUR LASTNAMER ");
+                System.out.println("STUDENT REGISTRATION");
+                System.out.println("");
+                System.out.print("ENTER YOUR LASTNAME ");
                 System.out.print(">");
                 String lastname = userInput.next();
 
@@ -271,10 +272,10 @@ public class App {
                     Application application = adekHandler.processRequest(new Request(option), application1);
 
                     if (application.getEducation() != null) {
-                        System.out.println("School " + application.getEducation().getEducation_name() + " found");
+                        System.out.println("SCHOOL " + application.getEducation().getEducation_name() + " FOUND");
                         application1 = application;
                     } else {
-                        System.out.println("School not found");
+                        System.out.println("SCHOOL NOT FOUND");
                         System.out.println("THIS IS NOT CORRECT OPTION ");
                         System.out.println("APPLICATION EXIT ");
                         System.exit(0);
@@ -294,8 +295,12 @@ public class App {
                     System.out.println("STUDENT DATE OF BIRTH: " + student1.getDate_of_birth());
                     System.out.println("STUDENT TELEPHONE NUMBER: " + student1.getTelephone_number());
                     System.out.println("STUDENT GENDER: " + student1.getGender());
-                    System.out.println("STUDENT ADDRESS:" + student1.getAddress());
-                    System.out.println("-----------------------------------------------------");
+                    for (Address address2 : application.getStudent().getAddress()) {
+                        System.out.println("STUDENT ADDRESS ");
+                        System.out.println("STUDENT DISTRICT: " + address2.getDistrict());
+                        System.out.println("STUDENT STREETNAME: " + address2.getStreetname());
+                        System.out.println("-----------------------------");
+                    }
                     Education education = educationDAO.selectEducationByEducationName(application.getEducation().getEducation_name());
                     System.out.println("EDUCATION TITLE:" + education.getTitle());
                     System.out.println("EDUCATION NAME:" + education.getEducation_name());
@@ -303,16 +308,20 @@ public class App {
                     System.out.println("EDUCATION TYPE:" + education.getType().getType_education());
                     System.out.println("TENDER DESCRIPTION:" + tender1.getTender_description());
 
+                    System.out.println("");
                     //STATUS NEW STUDENT
                     System.out.print("APPLICATION APPROVED? (Y/N) ");
+                    System.out.println(">");
                     String approved = userInput.next();
-                    System.out.print(">");
                     if (approved.equals("Y")) {
                         Status status = statusDAO.selectStatusById(1); // approved
                         application1.setStatus(status);
                         application1.setNote("NO REASON");
                         applicationDAO.createApplication(application1);
                         System.out.println("STUDENT CAN MAKE TRANSACTION");
+                        System.out.println("");
+                        System.out.println("APPLICATION EXIT ");
+                        System.exit(0);
                     } else if (approved.equals("N")) {
 
                         Status status = statusDAO.selectStatusById(2); // declined
@@ -351,6 +360,9 @@ public class App {
                         //SAVEN IN APPLICATION
                         application1.setNote(reason.getDesc());
                         applicationDAO.createApplication(application1);
+
+                        System.out.println("APPLICATION EXIT ");
+                        System.exit(0);
                     } else {
                         System.out.println("THIS IS NOT CORRECT OPTION ");
                         System.out.println("APPLICATION EXIT ");
@@ -363,7 +375,7 @@ public class App {
                     System.out.print(">");
                     String district = userInput.next();
 
-                    System.out.print("ENTER YOUR STREETNAME> ");
+                    System.out.print("ENTER YOUR STREETNAME ");
                     System.out.print(">");
                     String streetname = userInput.next();
 
@@ -371,12 +383,9 @@ public class App {
                     Set<Address> addresses = new HashSet<>();
                     Address address = new Address(district, streetname);
                     addresses.add(address);
-                    entityManager.persist(address);
 
                     //ikmoet set addres oproepen
                     student.setAddress(addresses);
-
-
 
                     StudentFactory studentFactory = new StudentFactory(entityManager);
                     Student studentFound = studentFactory.getStudent(firstname);
@@ -405,10 +414,10 @@ public class App {
                     Application application = adekHandler.processRequest(new Request(option), application1);
 
                     if (application.getEducation() != null) {
-                        System.out.println("School " + application.getEducation().getEducation_name() + " found");
+                        System.out.println("SCHOOL " + application.getEducation().getEducation_name() + " FOUND");
                         application1 = application;
                     } else {
-                        System.out.println("School not found");
+                        System.out.println("SCHOOL NOT FOUND");
                         System.out.println("THIS IS NOT CORRECT OPTION ");
                         System.out.println("APPLICATION EXIT ");
                         System.exit(0);
@@ -429,8 +438,12 @@ public class App {
                     System.out.println("STUDENT DATE OF BIRTH: " + student1.getDate_of_birth());
                     System.out.println("STUDENT TELEPHONE NUMBER: " + student1.getTelephone_number());
                     System.out.println("STUDENT GENDER: " + student1.getGender());
-                    System.out.println("STUDENT ADDRESS:" + student1.getAddress());
-                    System.out.println("-----------------------------------------------------");
+                    for (Address address2 : application.getStudent().getAddress()) {
+                        System.out.println("STUDENT ADDRESS ");
+                        System.out.println("STUDENT DISTRICT: " + address2.getDistrict());
+                        System.out.println("STUDENT STREETNAME: " + address2.getStreetname());
+                        System.out.println("-----------------------------");
+                    }
                     Education education = educationDAO.selectEducationByEducationName(application.getEducation().getEducation_name());
                     System.out.println("EDUCATION TITLE:" + education.getTitle());
                     System.out.println("EDUCATION NAME:" + education.getEducation_name());
@@ -449,6 +462,10 @@ public class App {
                         application1.setNote("NO REASON");
                         applicationDAO.createApplication(application1);
                         System.out.println("STUDENT CAN MAKE TRANSACTION");
+
+                        System.out.println("");
+                        System.out.println("APPLICATION EXIT ");
+                        System.exit(0);
                     } else if (approved.equals("N")) {
                         Status status = statusDAO.selectStatusById(2); // Declined
                         application1.setStatus(status);
@@ -486,6 +503,10 @@ public class App {
                         //SAVEN IN APPLICATION
                         application1.setNote(reason.getDesc());
                         applicationDAO.createApplication(application1);
+
+                        System.out.println("");
+                        System.out.println("APPLICATION EXIT ");
+                        System.exit(0);
                     } else {
                         System.out.println("THIS IS NOT CORRECT OPTION ");
                         System.out.println("APPLICATION EXIT ");

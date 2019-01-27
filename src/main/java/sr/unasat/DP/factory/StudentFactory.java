@@ -24,6 +24,8 @@ public class StudentFactory implements StudentInterface {
             Student student = studentDAO.selectStudentByFirstName(firstname);
             if (student != null) {
                 System.out.println("STUDENT ALREADY EXISTS.");
+                System.out.println("APPLICATION EXIT");
+                System.exit(0);
                 return student;
             }
         }
