@@ -41,8 +41,9 @@ public class App {
         System.out.println("***SELECT OPTIONS***");
         System.out.println("| 1. SEND NEW REQUEST" + ""
                 + " | 2. SEARCH APPLICATION " + ""
-                + " | 3. DELETE WRONG REGISTRATION " + ""
-                + " | 4. GET RAPPORT " + "");
+                + " | 3. UPDATE STUDENT FIRSTNAME " + ""
+                + " | 4. DELETE WRONG REGISTRATION " + ""
+                + " | 5. GET RAPPORT " + "");
         System.out.println("ENTER OPTION NUMBER: ");
         System.out.print(">");
 
@@ -63,6 +64,8 @@ public class App {
                     application1.setStudent(foundStudent);
                 } else {
                     System.out.println("STUDENT NOT FOUND");
+                    System.out.println("APPLICATION EXIT ");
+                    System.exit(0);
                 }
 
                 //EDUCATION FOUND STUDENT
@@ -89,7 +92,6 @@ public class App {
                     application1 = application;
                 } else {
                     System.out.println("SCHOOL NOT FOUND");
-                    System.out.println("THIS IS NOT CORRECT OPTION ");
                     System.out.println("APPLICATION EXIT ");
                     System.exit(0);
 
@@ -115,8 +117,12 @@ public class App {
                     System.out.println("STUDENT DATE OF BIRTH: " + student.getDate_of_birth());
                     System.out.println("STUDENT TELEPHONE NUMBER: " + student.getTelephone_number());
                     System.out.println("STUDENT GENDER: " + student.getGender());
-                    System.out.println("STUDENT ADDRESS:" + student.getAddress());
-                    System.out.println("-----------------------------------------------------");
+                    for (Address address2 : application.getStudent().getAddress()) {
+                        System.out.println("STUDENT ADDRESS ");
+                        System.out.println("STUDENT DISTRICT: " + address2.getDistrict());
+                        System.out.println("STUDENT STREETNAME: " + address2.getStreetname());
+                        System.out.println("-----------------------------");
+                    }
                     Education education = educationDAO.selectEducationByEducationName(application.getEducation().getEducation_name());
                     System.out.println("EDUCATION TITLE:" + education.getTitle());
                     System.out.println("EDUCATION NAME:" + education.getEducation_name());
@@ -135,16 +141,20 @@ public class App {
                         application1.setNote("NO REASON");
                         applicationDAO.createApplication(application1);
                         System.out.println("STUDENT CAN MAKE TRANSACTION");
+                        System.out.println("");
+                        System.out.println("APPLICATION EXIT ");
+                        System.exit(0);
                     } else if (approved.equals("N")) {
                         Status status = statusDAO.selectStatusById(2); // declined
                         application1.setStatus(status);
 
-                        System.out.println("CHOOSE BETWEEEN 1 AND 2 WHICH REASON THE APPLICATION IS BEING DECLINED FOR>");
+                        System.out.println("CHOOSE BETWEEEN 1 / 2  WHICH REASON OR BOTH REASONS THE APPLICATION IS BEING DECLINED FOR>");
                         System.out.println("1. INSUFFICIENT PAPEERS! ");
                         System.out.println("2. NO COLLATERAL! ");
                         System.out.println("3. BOTH REASONS");
 
                         System.out.println("WHICH REASON?");
+                        System.out.print(">");
                         String declinedReason = userInput.next();
                         //Decorator
                         Reason reason = new ReasonDecorator();
@@ -171,6 +181,10 @@ public class App {
                         //SAVEN IN APPLICATION
                         application1.setNote(reason.getDesc());
                         applicationDAO.createApplication(application1);
+
+                        System.out.println("");
+                        System.out.println("APPLICATION EXIT ");
+                        System.exit(0);
                     } else {
                         System.out.println("WRONG INPUT ");
                         System.out.println("APPLICATION EXIT ");
@@ -276,7 +290,6 @@ public class App {
                         application1 = application;
                     } else {
                         System.out.println("SCHOOL NOT FOUND");
-                        System.out.println("THIS IS NOT CORRECT OPTION ");
                         System.out.println("APPLICATION EXIT ");
                         System.exit(0);
                     }
@@ -327,7 +340,7 @@ public class App {
                         Status status = statusDAO.selectStatusById(2); // declined
                         application1.setStatus(status);
 
-                        System.out.println("CHOOSE BETWEEEN 1 AND 2 WHICH REASON THE APPLICATION IS BEING DECLINED FOR>");
+                        System.out.println("CHOOSE BETWEEEN 1 / 2 WHICH REASON OR BOTH REASONS THE APPLICATION IS BEING DECLINED FOR>");
                         System.out.println("1. INSUFFICIENT PAPEERS! ");
                         System.out.println("2. NO COLLATERAL! ");
                         System.out.println("3. BOTH REASONS");
@@ -418,7 +431,6 @@ public class App {
                         application1 = application;
                     } else {
                         System.out.println("SCHOOL NOT FOUND");
-                        System.out.println("THIS IS NOT CORRECT OPTION ");
                         System.out.println("APPLICATION EXIT ");
                         System.exit(0);
 
@@ -470,8 +482,8 @@ public class App {
                         Status status = statusDAO.selectStatusById(2); // Declined
                         application1.setStatus(status);
 
-                        System.out.println("CHOOSE BETWEEEN 1 AND 2 WHICH REASON THE APPLICATION IS BEING DECLINED FOR>");
-                        System.out.println("1. INSUFFICIENT PAPEERS! ");
+                        System.out.println("CHOOSE BETWEEEN 1 / 2 WHICH REASON OR BOTH REASONS THE APPLICATION IS BEING DECLINED FOR>");
+                        System.out.println("1. INSUFFICIENT PAPERS! ");
                         System.out.println("2. NO COLLATERAL! ");
                         System.out.println("3. BOTH REASONS");
 
@@ -559,20 +571,49 @@ public class App {
 
         } else if (newOrExistingApp.equals("3")) {
 
-            //DELETE WRONG REGISTRATION
+            System.out.println("WRITE FIRSTNAME TO SELECT STUDENT FIRSTNAME");
+            System.out.println(">");
+            String selectStudentFirstname = userInput.next();
 
+            Student updateStudent = studentDAO.selectStudentByFirstName(selectStudentFirstname);
+            if (updateStudent != null) {
+                System.out.println("STUDENT " + updateStudent.getFirstName() + " FOUND");
+                System.out.println("WRITE FIRSTNAME TO UPDATE STUDENT FIRSTNAME");
+                System.out.println(">");
+                String updateStudentFirstname = userInput.next();
+
+                updateStudent.setFirstName(updateStudentFirstname);
+                studentDAO.updateStudent(updateStudent);
+                System.out.println("Student " + updateStudentFirstname + " has been updated");
+
+                System.out.println("APPLICATION EXIT ");
+                System.exit(0);
+            } else {
+                System.out.println("STUDENT NOT FOUND");
+                System.out.println("APPLICATION EXIT ");
+                System.exit(0);
+            }
+
+        } else if (newOrExistingApp.equals("4")) {
             System.out.println("WRITE FIRSTNAME TO DELETE STUDENT RECORD");
             System.out.println(">");
             String deleteStudentFirstname = userInput.next();
 
             Student deleteStudent = studentDAO.selectStudentByFirstName(deleteStudentFirstname);
-            studentDAO.deleteStudent(deleteStudent);
-            System.out.println("Student " + deleteStudentFirstname + " has been deleted");
+            if (deleteStudent != null) {
+                System.out.println("STUDENT " + deleteStudent.getFirstName() + " FOUND");
+                studentDAO.deleteStudent(deleteStudent);
+                System.out.println("Student " + deleteStudentFirstname + " has been deleted");
 
-            System.out.println("APPLICATION EXIT ");
-            System.exit(0);
+                System.out.println("APPLICATION EXIT ");
+                System.exit(0);
+            } else {
+                System.out.println("STUDENT NOT FOUND");
+                System.out.println("APPLICATION EXIT ");
+                System.exit(0);
+            }
 
-        } else if (newOrExistingApp.equals("4")) {
+        } else if (newOrExistingApp.equals("5")) {
 
             System.out.println("WHICH RAPPORT DO YOU WANT TO SEE?");
             System.out.println(""
@@ -586,7 +627,6 @@ public class App {
             switch (whichRapport) {
                 case "1":
                     System.out.println("OVERVIEW OF THE LOANS");
-
                     Status status = statusDAO.selectAddressByStatus("APPROVED");
                     List<Application> applicationList = rapportingDAO.selectAllApplicationByApproved(status);
                     for (Application application : applicationList) {
@@ -622,7 +662,6 @@ public class App {
                     System.exit(0);
                     break;
                 case "2":
-
                     System.out.println();
                     System.out.println("*ANNUAL REVIEW PER MONTH*");
                     System.out.println("*ENTER THE YEAR: ");
@@ -639,16 +678,12 @@ public class App {
                             System.out.println();
                         }
                     }
-
                     System.out.println("APPLICATION EXIT ");
                     System.exit(0);
                     break;
                 case "3":
-
                     List<Application> applicationList4 = rapportingDAO.findAllSchoolApplications();
                     for (Application application : applicationList4) {
-                        //ander education dan naam wijzen
-                        // if () {
                         System.out.println("");
                         System.out.println("-------------BEGIN----------------");
                         System.out.println("DATE OF APPLICATION: " + application.getDate());
